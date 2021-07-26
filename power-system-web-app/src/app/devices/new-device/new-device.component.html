@@ -1,0 +1,78 @@
+
+  <div class='w-100 d-flex justify-content-center' style="margin-top: 20%;" *ngIf="loadedDevice && isNew == false">
+    <div class="loading-shade">
+      <mat-spinner color='primary' [diameter]= "'120'" ></mat-spinner>
+    </div>
+  </div>
+
+<div class="container-fluid p-3 m-1" *ngIf="isNew || loadedDevice==false">
+    <div class="row" >
+        <div class="container rounded bg-white mt-5">
+           
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-start">
+                    <h1 *ngIf="isNew">New device</h1>
+                    <h1 *ngIf="isNew == false">Edit device</h1>
+                </div>
+             </div>
+             <form [formGroup]="newDeviceForm" (ngSubmit)="saveChanges()">
+            <div class="row"  >
+                <div class="col-md-12">
+                    <div class="p-3 py-5">
+                        <mat-form-field class="w-100 m-auto"  appearance="fill">
+                            <mat-label>Type</mat-label>
+                            <mat-select required formControlName="deviceTypeControl" >                 
+                                <mat-option value="POWER_SWITCH">Power Switch</mat-option>
+                                <mat-option value="FUSE">Fuse</mat-option>
+                                <mat-option value="TRANSFORMER">Transformer</mat-option>
+                                <mat-option value="DISCONNECTOR">Disconnector</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-error *ngIf="submitted && newDeviceForm.controls.deviceTypeControl.invalid">
+                            Device type is required
+                        </mat-error>
+                        
+                    </div>
+                </div>
+            </div>
+
+
+
+            
+            <div class="row"  >
+                <div class="col-md-12">
+                    <div class="p-3 py-5">
+                        <mat-form-field class="w-100 m-auto"  appearance="fill">
+                            <mat-label>Address</mat-label>
+                            <mat-select required formControlName="deviceLocationControl">
+                                <mat-option *ngFor="let location of allLocations" value="{{location.id}}">{{getAddressFromLocation(location)}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-error *ngIf="submitted && newDeviceForm.controls.deviceLocationControl.invalid">
+                            Device address is required
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+
+
+     
+
+
+            <div class="col-md-12">                   
+                    <div class="save-button" >
+                        <button type="reset" [routerLink]="['/devices']" class="button-add"  style="float: right;">Cancel</button>                       
+                    </div>
+
+                    <div class="save-button" >
+                        <button class="button-add"  style="float: right;" >Save</button>                       
+                    </div>
+                           
+            </div>
+            </form>
+            
+
+        </div>
+    </div>
+</div>
+

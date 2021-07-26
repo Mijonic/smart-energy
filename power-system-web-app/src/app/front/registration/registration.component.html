@@ -1,0 +1,211 @@
+
+<div class="modal fade" id="registrationModalCenter" tabindex="-1" role="dialog" aria-labelledby="registerModalCenterTitle" aria-hidden="true" >
+    
+ <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+    <div class="loading-shade">
+      <mat-spinner color='primary' [diameter]= "'200'" ></mat-spinner>
+    </div>
+  </div>
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
+      <div class="modal-content">
+        <div class="modal-header" hidden="true">
+            <a><i class="fa fa-close" data-dismiss="modal"  #closeBtn></i></a>
+          </div>
+        <div class="modal-background">
+            <div class="d-flex justify-content-center" style="padding-top: 20px;">
+                <h2 style="font-size: 30px;">Register</h2>
+            </div>
+            <div class="d-flex justify-content-center registration_form_div">
+                <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+                    
+                    <div class="row">
+                
+                        <div class="col-md-3">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <img  src="../../assets/Images/Person.jpg" alt="..." class="rounded-circle registration_image" *ngIf="imagePreview == '' ">
+                                    <img  [src]="imagePreview" alt="..." class="rounded-circle registration_image" *ngIf="imagePreview != '' ">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="file"  accept="image/*" (change)="onSelectImage($event)"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    <div class="col-md-9">
+                        <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label class="registartion_labels" for="validationServer01">Username</label>
+                            <input type="text" [ngClass]="{'form-control':true, 'is-valid': isValid('username'), 'is-invalid': isInvalid('username')}"
+                             id="validationServer01" placeholder="Username" formControlName="username" required>
+                            <div class="invalid-feedback">
+                                Please provide a username.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="registartion_labels"  for="validationServer02">Email</label>
+                            <div class="input-group">
+                            <input type="text" formControlName="email" [ngClass]="{'form-control':true, 'is-valid': isValid('email'), 'is-invalid': isInvalid('email')}"
+                             id="validationServer02" placeholder="Email" aria-describedby="inputGroupPrepend3" required>
+                            <div class="invalid-feedback">
+                                Please provide a valid Email.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good.
+                            </div>
+                            </div>
+                        </div>
+                
+                        <div class="col-md-4 mb-3">
+                            <label class="registartion_labels">Role</label>
+                            <select #roleSelect (change)="onRoleChange(roleSelect.value)" formControlName="role" [ngClass]="{'form-control':true, 'is-valid': isValid('role'), 'is-invalid': isInvalid('role')}"
+                             id="exampleFormControlSelect1">
+                                <option value="CREW_MEMBER">Crew member</option>
+                                <option value="DISPATCHER">Dispatcher</option>
+                                <option value="WORKER">Worker</option> 
+                                <option value="CONSUMER">Consumer</option> 
+                              </select>
+                              <div class="invalid-feedback">
+                                Please choose a role.
+                               </div>
+
+                        </div>
+                
+                        
+                        </div>
+                        <div class="form-row">
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="registartion_labels" for="validationServer03">First name</label>
+                            <input type="text" formControlName="firstName" [ngClass]="{'form-control':true, 'is-valid': isValid('firstName'), 'is-invalid': isInvalid('firstName')}"
+                             id="validationServer03" placeholder="First name"  required>
+                             <div class="invalid-feedback">
+                                Please provide a first name.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good.
+                            </div>
+                        </div>
+                           
+                
+                        <div class="col-md-4 mb-3">
+                            <label class="registartion_labels" for="validationServer04">Last Name</label>
+                            <input type="text" formControlName="lastName" [ngClass]="{'form-control':true, 'is-valid': isValid('lastName'), 'is-invalid': isInvalid('lastName')}"
+                             id="validationServer04" placeholder="Last name" required>
+                             <div class="invalid-feedback">
+                                Please provide a last name.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good.
+                            </div>
+                        </div>
+                
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                            <label class="registartion_labels" >Date of birth</label>
+                            <input formControlName="dateOfBirth" type="date" name="bday" max="3000-12-31"
+                                   min="01-01-1900" [ngClass]="{'form-control':true, 'is-valid': isValid('dateOfBirth'), 'is-invalid': isInvalid('dateOfBirth')}">
+                           
+                           <div class="invalid-feedback" *ngIf="registrationForm.hasError('required', 'dateOfBirth')">
+                            Please provide a birth date.
+                           </div>
+                           <div class="invalid-feedback" *ngIf="registrationForm.hasError('underage', 'dateOfBirth')">
+                            You need to be over 18 to register.
+                           </div>
+                           <div class="valid-feedback">
+                                Looks good.
+                            </div>
+                          </div>
+                        </div>
+                
+                
+                       
+                        </div>
+                
+                        <div class="form-row">
+                           
+                
+                            <div class="col-md-4 mb-3">
+                                <label class="registartion_labels">Address</label>
+                                <select formControlName="location" [ngClass]="{'form-control':true, 'is-valid': isValid('location'), 'is-invalid': isInvalid('location')}"
+                                id="exampleFormControlSelect2">
+                                <option disabled selected value> -- select an address -- </option>
+                                <option *ngFor="let location of locations" value="{{location.id}}">{{ location.street }},&nbsp;{{ location.city }}</option>
+                              </select>
+                              <div class="invalid-feedback">
+                                Please choose your address.
+                               </div>
+                            </div>
+                
+                            
+                        <div class="col-md-4 mb-3">
+                            <label class="registartion_labels" for="validationServer06">Password</label>
+                            <input type="password"  formControlName="password"
+                             [ngClass]="{'form-control':true, 'is-valid': isValid('password'), 'is-invalid': isInvalid('password')}"
+                             id="validationServer06" placeholder="Password"  required>
+                             <div class="invalid-feedback" *ngIf="registrationForm.hasError('required', 'password')">
+                                Please provide a password.
+                            </div>
+                            <div class="valid-feedback">
+                                    Looks good.
+                            </div>
+                        </div>
+                
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="registartion_labels" for="validationServer07">Confirm Password</label>
+                            <input type="password" formControlName="confirmPassword"
+                             [ngClass]="{'form-control':true, 'is-valid': isValid('confirmPassword'), 'is-invalid': isInvalid('confirmPassword')}"
+                             id="validationServer07" placeholder="Confirm Password" required>
+                             <div class="invalid-feedback" *ngIf="registrationForm.hasError('mismatchedPasswords')">
+                                Passwords do not match.
+                            </div>
+                               <div class="valid-feedback">
+                                    Looks good.
+                                </div>
+                        </div>
+                
+                
+                        </div>
+                
+                       
+                        <div class="form-row">
+                            
+
+                            <div class="col-md-4 mb-3" *ngIf="showCrews">
+                                <label class="registartion_labels">Crew</label>
+                                <select formControlName="crew" [ngClass]="{'form-control':true, 'is-valid': isValid('crew'), 'is-invalid': isInvalid('crew')}"
+                                id="exampleFormControlSelect2">
+                                    <option *ngFor="let crew of crews" value="{{crew.id}}">{{ crew.crewName }}</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                Please choose your crew.
+                               </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                
+                            </div>
+                        </div>
+                        <button class="btn btn-light" type="submit">Register</button>
+                        <button hidden=true type="reset" #resetBtn>Reset</button> 
+                    </div>
+                   
+                    </div>
+                  </form>
+                
+                  </div>
+                
+                
+        </div>
+      </div>
+    </div>
+  </div>
+
+

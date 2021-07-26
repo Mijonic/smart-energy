@@ -1,0 +1,70 @@
+
+<div class="container-fluid p-3 m-1">
+    <div class="row" >
+        <div class="container rounded bg-white mt-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                       <h1>Visible notifications & documents</h1>
+                       <div class="row w-100">
+                         <div class="col-md-6">
+  
+                            <div class="checkbox-div w-100">
+                                <section class="example-section">
+                                    <h2 class="text-left pl-3">Notifications</h2>
+                                    <mat-checkbox  [(ngModel)]="settings.showInfo" color="primary" class="example-margin" >Show info notifications</mat-checkbox>
+                                    <mat-checkbox [(ngModel)]="settings.showErrors"  color="primary" class="example-margin" >Show error notifications</mat-checkbox>
+                                    <mat-checkbox [(ngModel)]="settings.showWarnings" color="primary" class="example-margin" >Show warning notifications</mat-checkbox>
+                                    <mat-checkbox [(ngModel)]="settings.showSuccess"  color="primary" class="example-margin" >Show success notifications</mat-checkbox>
+                                </section>
+                            </div>
+                           </div>
+                           <div class="col-md-6">
+                            <div class="checkbox-div w-100">
+                                <section class="example-section">
+                                    <h2 class="text-left pl-3">Documents</h2>
+                                    <mat-checkbox [(ngModel)]="settings.showNonRequiredFields" color="primary" class="example-margin" >Show non required document fields</mat-checkbox>
+                                </section>
+                            </div>
+                           </div>
+                       </div>
+                        
+                    </div>
+
+                    <div class="save-button mb-5">
+                        <button (click)="onSave()" class="button-add">Save Changes</button>                       
+                    </div>
+                </div>
+
+               <!--<div class="col-md-6">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <h1>Visible Documents</h1>
+                        <h3 class="mt-3">Choose type of documents</h3>
+                        <mat-form-field class="example-full-width mb-5" appearance="fill">
+                            <mat-label>Type</mat-label>
+                            <mat-select>
+                                <mat-option value="work-plan">Work plan</mat-option>
+                                <mat-option value="work-request">Work request</mat-option>
+                                <mat-option value="safety-documents">Safety documents</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <h3>Choose fields that you want to be visible</h3>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Fields</mat-label>
+                            <mat-select multiple>
+                                <mat-option value="field1">Field 1</mat-option>
+                                <mat-option value="field2">Field 2</mat-option>
+                                <mat-option value="field3">Field 3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                     </div>
+
+                    <div class="save-button mb-5">
+                        <button class="button-add">Save Changes</button>                       
+                    </div>
+                </div>--> 
+            </div>
+        </div>
+    </div>
+</div>

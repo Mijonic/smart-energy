@@ -1,0 +1,72 @@
+<!--<app-particles></app-particles>
+<app-register-login-navbar></app-register-login-navbar>-->
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        
+        <div class="modal-background">
+            <div class="d-flex justify-content-center report_header">
+                <h2 style="font-size: 30px;">Report Outage</h2>
+            </div>
+            <div class="d-flex justify-content-center report_form_div">
+                
+                <form  class="report_form">
+                    <div class="form-group pb-1">
+                        <label class="report_labels" for="account-id"> Account ID: </label>
+                        <input type="text" class="form-control" placeholder="Enter account ID" id="account-id" required>
+                    </div>
+                    <div class="form-group pb-1">
+                        <label class="report_labels" for="street-name"> Street Name: </label>
+                        <input type="text" class="form-control" placeholder="Enter a street name" id="street-name" required>
+                    </div>
+                    <div class="form-group pb-1">
+                        <label class="report_labels" for="street-number"> Street Number: </label>
+                        <input type="text" class="form-control" placeholder="Enter a street number" id="street-number" required>
+                    </div>
+                    <label class="report_labels" for="reason"> Reason: </label>
+                    <div class="form-group pb-1">
+                          <select class="form-control" name="reason">
+                           <!-- <option value="" disabled selected>Select a reason</option>-->
+                            <option value="no-electricity">No electricity</option>
+                            <option value="flickering-light">Flickering light</option>
+                            <option value="partial-current">Partial current</option>
+                            <option value="voltage-problem">Voltage problem</option>
+                            <option value="return-current">Return of current</option>
+                            <option value="malfunction">Some malfunction</option>
+                        </select>
+                    </div>
+            
+                    <div class="form-group pb-1">
+                        <label class="report_labels" for="comment"> Comment: </label>
+                        <textarea class="form-control comment-box" placeholder="Enter a comment" id="comment"></textarea>
+                    </div>
+
+                    <div class="form-group pb-1">
+                        <label class="report_labels" for="priority"> Priority: </label>
+                        <select class="form-control" name="priority">
+                            <!--<option value="" disabled selected>Select a priority</option>-->
+                            <option value="priority-1">Priority 1</option>
+                            <option value="priority-2">Priority 2</option>
+                            <option value="priority-3">Priority 3</option>
+                            <option value="priority-4">Priority 4</option>
+                            <option value="priority-5">Priority 5</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group pb-3">
+                        <input class="mr-2" type="checkbox" id="anonymous" name="anonymous" checked>
+                        <label class="report_labels" for="anonymous">Leave personal informations</label>
+                    </div>
+
+                    <div class="form-group report-button pb-2">
+                        <button type="submit" class="btn btn-light">Report Outage</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

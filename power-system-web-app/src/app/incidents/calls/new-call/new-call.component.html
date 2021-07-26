@@ -1,0 +1,164 @@
+<div class="container-fluid p-3 m-1">
+    <div class="row" >
+      <div class="container rounded bg-white mt-5">
+
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-start">
+                <h1 class="p-3 pb-5">New call</h1>
+            </div>
+         </div>
+         
+         
+         <form [formGroup]="newCallForm" (ngSubmit)="onSave()">
+
+        <div class="row" >
+          <div class="col-md-6">
+            <div class="p-3 py-5">
+              <mat-form-field >
+                <mat-label>Reason</mat-label>
+                <mat-select required formControlName="callReason">
+                  <mat-option *ngFor="let reason of reasons" [value]="reason">{{reason}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="submitted && newCallForm.controls.callReason.invalid">
+                 Reason is required
+           </mat-error>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+              <div class="p-3 py-5">
+                <mat-form-field class="w-100">
+                  <mat-label>Hazard</mat-label>
+                  <input matInput placeholder="specify hazard" required formControlName="hazard" value="">
+                </mat-form-field>
+                <mat-error *ngIf="submitted && newCallForm.controls.hazard.invalid">
+                   Hazard is required.
+              </mat-error>
+              </div>
+          </div>
+        </div>
+
+        
+        <div class="row" >
+          <div class="col-md-6">
+              <div class="p-3 py-5">
+                <mat-form-field class="w-100">
+                  <mat-label>Comment</mat-label>
+                  <textarea matInput formControlName="comment" placeholder="Explain in depth what caused the outage"></textarea>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && newCallForm.controls.comment.invalid">
+                  Comment must not exceed 100 characters.
+              </mat-error>
+              </div>
+          </div>
+
+
+          <div class="col-md-6" *ngIf="isCustomerSelected == false">
+            <div class="p-3 py-5">
+              <mat-form-field class="w-100 m-auto"  appearance="legacy">
+                  <mat-label>Address</mat-label>
+                  <mat-select required formControlName="callLocationControl">
+                      <mat-option *ngFor="let location of allLocations" value="{{location.id}}">{{getAddressFromLocation(location)}}</mat-option>
+                  </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="submitted && newCallForm.controls.callLocationControl.invalid">
+                  Device address is required
+              </mat-error>
+            </div>
+        </div>
+        </div>
+
+      
+
+        <div class="row">
+           <div class="col-md-12 d-flex justify-content-start">
+               <h2 class="p-3 pb-5">Customer info</h2>
+           </div>
+        </div>
+
+        <div class="row" >
+            <div class="col-md-6">
+                <div class="p-3 py-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Specify  name" value="{{consumer.name}}" disabled>
+                  </mat-form-field>
+                </div>
+            </div>
+  
+            <div class="col-md-6">
+                <div class="p-3 py-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Last name</mat-label>
+                    <input matInput placeholder="Specify last name" value="{{consumer.lastname}}" disabled>
+                  </mat-form-field>
+                </div>
+            </div>
+          </div>
+
+          <div class="row" >
+            <div class="col-md-6">
+                <div class="p-3 py-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Account</mat-label>
+                    <input matInput placeholder="Specify consumer account number" value="{{consumer.accountID}}" disabled>
+                  </mat-form-field>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="p-3 py-5">
+                <mat-form-field class="w-100">
+                  <mat-label>Address</mat-label>
+                  
+
+                  <div *ngIf="isCustomerSelected; else notShow">
+                    <input matInput placeholder="Specify consumer address" value="{{getAddressFromLocation(consumer.location!)}}" disabled>
+                  </div>
+                  
+                  <ng-template #notShow>
+                    <input matInput placeholder="Specify consumer address" value="" disabled>
+                  </ng-template>
+                </mat-form-field>
+              </div>
+          </div>
+  
+         
+          </div>
+         <!--
+          <div class="row" >
+            <div class="col-md-6">
+              <div class="p-3 py-5">
+                <mat-form-field class="w-100">
+                  <mat-label>Priority</mat-label>
+                  <input matInput placeholder="Specify consumer priority" value="" disabled>
+                </mat-form-field>
+              </div>
+          </div>
+          </div>
+          -->
+
+     
+
+          <div class="row" >
+            <div class="col-md-6 ">
+                <div class="p-3 d-flex justify-content-start">
+                    <button type="button" (click)="onChooseCustomer()" class="button-add w-75" >Choose customer</button>                       
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 d-flex justify-content-end">
+                     <button type="submit" class="button-add w-75" >Save</button>                       
+                </div>
+            </div>
+          </div>
+         
+
+        </form>
+  
+
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,49 @@
+.notification {
+    text-align: left;
+    display: flex;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    height: 50px;
+}
+.error
+{
+    background-color: #f97c7c;
+}
+
+.warning
+{
+    background-color: #ffae78;
+}
+
+.info
+{
+    background-color: #9cb8d9;
+}
+
+.success
+{
+    background-color: #b8d8be;
+}
+.icon {
+    text-align: center;
+    width: 5%;
+}
+.text {
+    display: flex;
+    text-align: left;
+    width: 80%;
+    padding: 0px !important;
+}
+.timestamp {
+    text-align: right;
+    width: 15%;
+}
+
+.notif-more-button
+{
+    margin: 0px !important;
+    padding: 0px !important; 
+    width: 10%;
+    font-size: 12px;
+    text-align: center;
+}

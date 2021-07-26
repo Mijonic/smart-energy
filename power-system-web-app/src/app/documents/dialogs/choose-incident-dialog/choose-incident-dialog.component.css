@@ -1,0 +1,8 @@
+td.mat-cell, th.mat-header-cell {
+    text-align: center;
+    justify-content:center;
+}
+
+td, th {
+    width: 15%;
+  }

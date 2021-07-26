@@ -1,0 +1,96 @@
+<div class="container-fluid p-3 m-1">
+    <div class="row" >
+        <div class="container rounded bg-white mt-5">
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-start">
+
+                    <h1>Resolution</h1>
+                </div>
+             </div>
+             <form [formGroup]="newResolutionForm" (ngSubmit)="saveChanges()">
+            <div class="row"  >
+                <div class="col-md-12">
+                    <div class="p-3 py-5">
+                        <mat-form-field class="w-100 m-auto" appearance="fill">
+                            <mat-label>Cause</mat-label>
+                            <mat-select (selectionChange)="causeSelectionChanged($event)" required formControlName="causeControl" >
+                                <mat-option value="FAILURE">FAILURE</mat-option>
+                                <mat-option value="WEATHER">WEATHER</mat-option>
+                                <mat-option value="HUMAN_ERROR">HUMAN ERROR</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submitted && newResolutionForm.controls.causeControl.invalid">
+                                Cause is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf= "shouldShowSubcauses" >
+                <div class="col-md-12">
+                    <div class="p-3 py-5">
+                        <mat-form-field class="w-100 m-auto" appearance="fill">
+                            <mat-label >Subcause</mat-label>
+                        
+                             <mat-select required formControlName="subcauseControl">         
+                                <mat-option  *ngFor="let value of subcauses" value="{{value}}">{{value}}</mat-option>
+                             </mat-select>
+                            <mat-error *ngIf="submitted && newResolutionForm.controls.subcauseControl.invalid">
+                                Subcause is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row"  >
+                <div class="col-md-12">
+                    <div class="p-3 py-5">
+                        <mat-form-field class="w-100 m-auto" appearance="fill">
+                            <mat-label>Construction type</mat-label>
+                            <mat-select required formControlName="constructionControl">
+                                <mat-option value="UNDERGROUND">UNDERGROUND</mat-option>
+                                <mat-option value="SURFACE">SURFACE</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submitted && newResolutionForm.controls.constructionControl.invalid">
+                                Construction is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="row" >
+                <div class="col-md-12">
+                    <div class="p-3 py-5">
+                        <mat-form-field class="w-100 m-auto" appearance="fill">
+                            <mat-label>Material</mat-label>
+                            <mat-select required formControlName="materialControl">
+                                <mat-option value="METAL">METAL</mat-option>
+                                <mat-option value="PLASTICS">PLASTICS</mat-option>
+                                <mat-option value="CERAMICS">CERAMICS</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submitted && newResolutionForm.controls.materialControl.invalid">
+                                Material is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">                   
+                <div class="save-button" >
+                    <button type="reset" [routerLink]="['/incidents']" class="button-add"  style="float: right;">Cancel</button>                       
+                </div>
+
+                <div class="save-button" >
+                    <button type="submit" class="button-add"  style="float: right;" >Save</button>  
+                              
+                </div>
+                       
+             </div>
+            </form>
+        </div>
+    </div>
+</div>

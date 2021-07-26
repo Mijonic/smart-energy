@@ -1,0 +1,55 @@
+.card{
+    float:left;
+    height: 380px;
+    margin-left: 2%;
+    margin-top:10px;
+    width:15rem;
+  }
+  
+  .card-title, .title-row{
+    height:30px;
+  }
+    
+    .profile-image {
+      width:100%;
+      height:10rem;
+      object-fit: cover;
+    }
+  
+    .card-title{
+      font-weight:bolder ;
+      overflow-y:hidden;
+    }
+  
+    .button-user-card{
+      padding:5px;
+      width:70px;
+      border-radius: 5px;
+      color:white;
+      transition-duration: 0.4s;
+    }
+
+    .button-add{
+      width:80px;
+    }
+  
+    .approve{
+      background-color: #4CAF50; 
+      color: white;
+    }
+  
+    .deny{
+      background-color: #ff3333;
+    }
+  
+    .approve:hover {
+      background-color: white;
+      color: black;
+      border: 2px solid #4CAF50; 
+    }
+  
+    .deny:hover {
+      background-color: white; 
+      color: black;
+      border: 2px solid #ff3333; 
+    }

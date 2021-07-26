@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
+    <PackageReference Include="FacebookCore" Version="2.1.13" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.51.0" />
+    <PackageReference Include="MailKit" Version="2.12.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.15" />
+    <PackageReference Include="nClam" Version="5.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartEnergy.Contract\SmartEnergy.Contract.csproj" />
+    <ProjectReference Include="..\SmartEnergy.Infrastructure\SmartEnergy.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

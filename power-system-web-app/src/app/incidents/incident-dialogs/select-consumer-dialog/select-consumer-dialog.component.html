@@ -1,0 +1,107 @@
+
+
+
+<h1 mat-dialog-title>Select consumer</h1>
+<div mat-dialog-content > 
+    <div class="container-fluid p-3 m-1">
+        <div class="row"  >
+            <div class="col-md-12">
+                <div class="mat-elevation-z8 mt-4">
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>more_vert</mat-icon>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <form [formGroup]="searchFilterConsumers">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field>
+                                <mat-label>Search</mat-label>
+                                <input matInput formControlName="searchControl"  (keyup.enter)="filter()" placeholder="Search consumers" #input> 
+                                </mat-form-field>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-8">
+                                <mat-form-field appearance="fill">
+                                <mat-label>Account type</mat-label>
+                                <mat-select formControlName ="accountTypeControl"  (selectionChange)="filter()">
+                                    <mat-option *ngFor="let type of accountTypes" [value]="type">{{type}}</mat-option>
+                                </mat-select>
+                                </mat-form-field>
+                            </div>
+                            
+                        </div>
+                        </form>
+                    </mat-expansion-panel>
+                </div>  
+                <div class="row"> 
+                    <div class="col-md-12">
+                        <div class="mat-elevation-z8 mt-n1 table-responsive">
+                            <table mat-table [dataSource]="dataSource" matSort> 
+                            
+                                <!-- ID Column -->
+                                <ng-container matColumnDef="id">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                                <td mat-cell *matCellDef="let row"> {{row.id}}</td>
+                                </ng-container>
+                            
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                                </ng-container>
+                            
+                                <!-- Type Column -->
+                                <ng-container matColumnDef="lastname">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Lastname </th>
+                                <td mat-cell *matCellDef="let row"> {{row.lastname}} </td>
+                                </ng-container>
+
+
+                                 <!-- Type Column -->
+                                <ng-container matColumnDef="accountID">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Id </th>
+                                <td mat-cell *matCellDef="let row"> {{row.accountID}} </td>
+                                </ng-container>
+
+                                  <!-- Type Column -->
+                                <ng-container matColumnDef="accountType">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Type </th>
+                                <td mat-cell *matCellDef="let row"> {{row.accountType}} </td>
+                                </ng-container>
+                            
+                                
+    
+                                <ng-container matColumnDef="add">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+                                    <td mat-cell *matCellDef="let row"> <a class="clickable" [mat-dialog-close]="row"><mat-icon  color="primary" matTooltip="Select consumer"> add</mat-icon></a> </td>
+                                </ng-container>
+                                
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            
+                            </table>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-12 mt-0 ">
+                                <div class="mat-elevation-z8">
+                                    <mat-paginator [pageSizeOptions]="[5, 10, 15]"></mat-paginator> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    </div>
+    
+    
+<div mat-dialog-actions>
+  <button class="button-add" mat-button (click)="onCancelClick()">Cancel</button>
+</div>
+

@@ -1,0 +1,33 @@
+<div class="card mat-elevation-z8 mb-2">
+    <div class='w-100 d-flex justify-content-center' *ngIf="isLoadingImage">
+      <mat-spinner color='primary' [diameter]= "'100'"></mat-spinner>
+    </div>
+    <img #avatar class="card-img-top profile-image" src="../../../assets/Images/zmaj.jpg" alt="Card image cap" *ngIf="isLoadingImage == false" >
+    <div class="card-body pb-1">
+      <div class="d-flex flex-row title-row">
+          <h2 class="card-title mb-0">{{getUserDisplay()}}</h2>
+
+          <h3>
+              <mat-icon [inline]="true" *ngIf="user.userStatus === 'APPROVED' ">verified_user</mat-icon>
+              <mat-icon [inline]="true" *ngIf="user.userStatus === 'PENDING' ">hourglass_full</mat-icon>
+              <mat-icon [inline]="true" *ngIf="user.userStatus === 'DENIED' ">block</mat-icon>
+          </h3>
+     </div>
+      <div class="d-flex flex-row text-secondary title-row"><h4>{{getUserTypeDisplay(user.userType)}}</h4></div>
+    </div>
+    <div class="card-body pb-2 pt-0">
+      <p class="m-0"><mat-icon [inline]="true">person</mat-icon>&nbsp;{{user.username}}</p>
+      <p class="m-0" style="max-height:35px; overflow:auto;"><mat-icon [inline]="true" > email</mat-icon>&nbsp;{{user.email}}</p>
+      <p class="m-0"><mat-icon [inline]="true">date_range</mat-icon>&nbsp;{{ getDateForDisplay(user.birthDay)}}</p>
+      <p class="m-0"><mat-icon [inline]="true">location_on</mat-icon>&nbsp;{{getLocationDisplayString(user.location)}}</p>
+    </div>
+    <hr class="mt-1 mb-1">
+    <div class="card-body pt-2 pb-2 d-flex flex-row justify-content-between" *ngIf="user.userStatus === 'PENDING'">
+      <div class="mr-auto" *ngIf="user.userStatus === 'PENDING'">
+        <button [hidden]="_authGuard.isUserAdmin() == false" (click)="approveUser(user.id)" class="card-link button-add">Approve</button>
+      </div>
+      <div *ngIf="user.userStatus === 'PENDING'">
+        <button [hidden]="_authGuard.isUserAdmin() == false" (click)="denyUser(user.id)" class="card-link button-add">Deny</button>
+      </div>
+    </div>
+  </div>

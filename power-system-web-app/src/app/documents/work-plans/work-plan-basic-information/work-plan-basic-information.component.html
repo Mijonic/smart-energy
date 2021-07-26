@@ -1,0 +1,173 @@
+<div class="container-fluid">
+    <div class="row" >
+      <div class="container rounded bg-white mt-5">
+
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-start">
+                <h1 class="p-3 pb-5">New work plan</h1>
+            </div>
+         </div>
+
+        <div class="row" >
+          <div class="col-md-6">
+            <div class="p-3">
+              <mat-form-field >
+                <mat-label>Document type</mat-label>
+                <mat-select>
+                  <mat-option *ngFor="let documentType of documentTypes" [value]="documentType">{{documentType}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-3">
+              <mat-form-field class="w-100">
+                <mat-label>Status</mat-label>
+                <input matInput disabled value="Draft">
+              </mat-form-field>
+            </div>
+           </div>
+        </div>
+
+        
+        <div class="row" >
+          <div class="col-md-6">
+            <div class="p-3 d-flex flex-row">
+              <mat-form-field >
+                <mat-label>Incident</mat-label>
+                <input matInput disabled value="33234361">
+              </mat-form-field>
+              <a (click)="onChooseIncident()" class="clickable pl-1 pt-3">
+                <mat-icon >more_horiz</mat-icon>
+              </a>
+            </div>
+          </div>
+  
+            <div class="col-md-6">
+              <div class="p-3 d-flex flex-row">
+                <mat-form-field >
+                  <mat-label>Work request</mat-label>
+                  <input matInput disabled value="234345">
+                </mat-form-field>
+                <a (click)="onChooseWorkRequest()" class="clickable pl-1 pt-3">
+                  <mat-icon >more_horiz</mat-icon>
+                </a>
+              </div>
+            </div>
+        </div>
+
+
+        <div class="row" >
+            <div class="col-md-6">
+              <div class="p-3">
+                <mat-form-field appearance="legacy" class="w-100">
+                    <mat-label>Start date/time</mat-label>
+                    <input matInput [matDatepicker]="startTime">
+                    <mat-datepicker-toggle matSuffix [for]="startTime" class="date-picker-image"></mat-datepicker-toggle>
+                    <mat-datepicker #startTime></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <div class="col-md-6">
+              <div class="p-3">
+                <mat-form-field appearance="legacy" class="w-100">
+                    <mat-label>End date/time</mat-label>
+                    <input matInput [matDatepicker]="endTime">
+                    <mat-datepicker-toggle matSuffix [for]="endTime" class="date-picker-image"></mat-datepicker-toggle>
+                    <mat-datepicker #endTime></mat-datepicker>
+                  </mat-form-field>
+              </div>
+            </div>
+        </div>
+
+        <div class="row" >
+            <div class="col-md-6">
+              <div class="p-3">
+                <mat-form-field class="w-100">
+                    <mat-label>Company</mat-label>
+                    <input matInput placeholder="Specify company that will handle outage" value="">
+                  </mat-form-field>
+              </div>
+            </div>
+  
+            <div class="col-md-6">
+              <div class="p-3">
+                <mat-form-field class="w-100">
+                  <mat-label>Phone number</mat-label>
+                  <input matInput placeholder="Specify phone number of consumer who reported outage" value="">
+                </mat-form-field>
+              </div>
+            </div>
+        </div>
+  
+        <div class="row" >
+            <div class="col-md-6">
+              <div class="p-3">
+                <mat-form-field appearance="legacy" class="w-100">
+                    <mat-label>Created on</mat-label>
+                    <input disabled matInput [matDatepicker]="createdTime">
+                    <mat-datepicker-toggle matSuffix [for]="createdTime" class="date-picker-image"></mat-datepicker-toggle>
+                    <mat-datepicker #createdTime></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <div class="col-md-6">
+              <div class="p-3">
+                <mat-form-field >
+                    <mat-label>Field crew</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let documentType of documentTypes" [value]="documentType">{{documentType}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+              </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-3">
+                    <mat-form-field class="w-100">
+                        <mat-label>Created by</mat-label>
+                        <input matInput disabled value="Pedjurda Glavasurda">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3">
+                    <mat-form-field class="w-100">
+                        <mat-label>Purpose</mat-label>
+                        <input matInput placeholder="Specify work plan purpose" value="">
+                    </mat-form-field>
+                </div>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-md-6">
+                <div class="p-3">
+                    <mat-form-field class="w-100">
+                        <mat-label>Details</mat-label>
+                        <textarea matInput placeholder="Explain in depth what will be done"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3">
+                    <mat-form-field class="w-100">
+                        <mat-label>Notes</mat-label>
+                        <textarea matInput placeholder="Add additional info that will help"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+         </div>
+
+
+      </div>
+    </div>
+  </div>
+

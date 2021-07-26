@@ -1,0 +1,85 @@
+<h1 mat-dialog-title>New switching instruction</h1>
+<div mat-dialog-content>
+    <div class="row my-3"> 
+        <div class="col-md-12">
+          <div class="mat-elevation-z8 mt-n1 table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort> 
+          
+              <!-- ID Column -->
+              <ng-container matColumnDef="action" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                <!--Change this-->
+                <td mat-cell *matCellDef="let row"><a class="clickable" (click)="onAddEquipment(row.id)"><mat-icon>add_box</mat-icon></a></td>
+              </ng-container>
+              
+              <!-- Progress Column -->
+              <ng-container matColumnDef="id" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                <td mat-cell *matCellDef="let row"> {{row.id}}% </td>
+              </ng-container>
+              
+              <!-- Progress Column -->
+              <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
+              </ng-container>
+          
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+              </ng-container>
+          
+              <!-- Color Column -->
+              <ng-container matColumnDef="coordinates">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Coordinates </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="address">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+        
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          
+            </table>
+          </div> 
+            <div class="row">
+              <div class="col-md-12 mt-0 ">
+                <div class="mat-elevation-z8">
+                  <mat-paginator [pageSizeOptions]="[5, 10, 15]"></mat-paginator> 
+                </div>
+              </div>
+            </div>
+
+
+        </div>
+      </div>
+
+      <div class="row">
+          <div class="col-md-12">
+            <mat-form-field class="w-100">
+                <mat-label>Equipment id</mat-label>
+                <input disabled matInput value="245697" />
+            </mat-form-field>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field class="w-100">
+              <mat-label>Instruction</mat-label>
+              <textarea matInput placeholder="Explain how to execute instruction"></textarea>
+          </mat-form-field>
+        </div>
+     </div>
+</div>
+<div mat-dialog-actions class="d-flex flex-row justify-content-between">
+
+    <button class="button-add" mat-button (click)="onCancelClick()">Cancel</button>
+    <button class="button-add" mat-button (click)="onSaveClick()">Save</button>
+
+</div>

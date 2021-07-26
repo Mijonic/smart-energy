@@ -1,0 +1,53 @@
+
+<div class="container-fluid p-3 m-1">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="mat-elevation-z8 mt-n1 table-responsive">
+              <table mat-table [dataSource]="dataSource" matSort> 
+            
+                <!-- ID Column -->
+                <ng-container matColumnDef="priority" sticky>
+                  <th mat-header-cell *matHeaderCellDef> Priority </th>
+                  <!--Change this-->
+                  <td mat-cell *matCellDef="let row">
+                    <select name="priority">
+                        <!--<option value="" disabled selected>Select a priority</option>-->
+                        <option value="priority-1">Priority 1</option>
+                        <option value="priority-2">Priority 2</option>
+                        <option value="priority-3">Priority 3</option>
+                        <option value="priority-4">Priority 4</option>
+                        <option value="priority-5">Priority 5</option>
+                    </select>
+                  </td>
+                </ng-container>
+            
+                <!-- Progress Column -->
+                <ng-container matColumnDef="street-name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Street Name </th>
+                  <td mat-cell *matCellDef="let row"> {{row.streetName}} </td>
+                </ng-container>
+            
+                <!-- Name Column -->
+                <ng-container matColumnDef="street-number">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Street Number </th>
+                  <td mat-cell *matCellDef="let row"> {{row.streetNumber}} </td>
+                </ng-container>
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            
+                <!-- Row shown when there is no matching data. 
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">No data matching "{{input.value}}"</td>
+                </tr>-->
+              </table>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-0 ">
+                  <div class="mat-elevation-z8">
+                    <mat-paginator [pageSizeOptions]="[10, 15, 20]"></mat-paginator> 
+                  </div>
+                </div>
+              </div>
+    </div>
+</div>

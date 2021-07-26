@@ -1,0 +1,99 @@
+<ng-container *ngIf="showAllCalls">
+  <div class="container-fluid p-3 m-1 pr-4">
+    
+    <div class="mat-elevation-z8 mt-4">
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>more_vert</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row">
+          <div class="col-md-6 pt-3">
+            <form [formGroup]="filterCalls">
+            <mat-form-field >
+              <mat-label>Reason</mat-label>
+              <mat-select formControlName="reasonsControl"  (selectionChange)="filter()">
+                <mat-option *ngFor="let reason of reasons" [value]="reason">{{reason}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form>
+          </div>
+
+          <div class="col-md-6 pb-3 pt-2 d-flex justify-content-end"> 
+            <button (click)="onAddClick()" class="button-add pt-2 d-flex justify-content-center"><mat-icon>add</mat-icon></button> 
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </div>  
+
+    <div class="row"> 
+      <div class="col-md-12">
+
+        <div class="mat-elevation-z8 mt-n1 table-responsive">
+          <table mat-table [dataSource]="dataSource" matSort
+          matSortActive="id" matSortDisableClear matSortDirection="asc"> 
+        
+            <!-- ID Column -->
+            <ng-container matColumnDef="id" sticky>
+              <th mat-header-cell *matHeaderCellDef  mat-sort-header> ID </th>
+              <!--Change this-->
+              <td mat-cell *matCellDef="let row">{{row.id}}</td>
+            </ng-container>
+        
+            <!-- Progress Column -->
+            <ng-container matColumnDef="callReason">
+              <th mat-header-cell *matHeaderCellDef sticky  mat-sort-header > Reason </th>
+              <td mat-cell *matCellDef="let row"> {{row.callReason}} </td>
+            </ng-container>
+        
+            <!-- Name Column -->
+            <ng-container matColumnDef="hazard">
+              <th mat-header-cell *matHeaderCellDef  mat-sort-header > Hazard </th>
+              <td mat-cell *matCellDef="let row"> {{row.hazard}} </td>
+            </ng-container>
+        
+            <!-- Color Column -->
+            <ng-container matColumnDef="comment">
+              <th mat-header-cell *matHeaderCellDef  mat-sort-header > Comment </th>
+              <td mat-cell *matCellDef="let row" > {{row.comment}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef  > Consumer Name </th>
+              <td mat-cell *matCellDef="let row" > {{row.consumer?.name}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="lastname">
+              <th mat-header-cell *matHeaderCellDef > Consumer Lastname </th>
+              <td mat-cell *matCellDef="let row" > {{row.consumer?.lastname}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data to display</td>
+            </tr>
+          </table>
+        </div> 
+
+          <div class="row">
+            <div class="col-md-12 mt-0 ">
+              <div class="mat-elevation-z8">
+                <mat-paginator [pageSizeOptions]="[5, 10, 15]"></mat-paginator> 
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+  </div>
+</ng-container>
+
+<ng-container *ngIf="showAllCalls == false" #newCall>
+  <app-new-call [reasons]="reasons" (newCallFinished)="showCalls()"></app-new-call>
+</ng-container>

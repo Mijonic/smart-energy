@@ -1,0 +1,100 @@
+version: '3.4'
+
+services:
+
+  #devices 
+  smartenergy.devicesapi:
+    image: ${DOCKER_REGISTRY-}smartenergydevicesapi
+    build:
+      context: .
+      dockerfile: SmartEnergy.DevicesAPI/Dockerfile
+    ports:
+        - "52000:50001"
+        - "44373:80"
+    depends_on:
+        - device-db
+   
+  smartenergydevice-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "smartenergydevice", "-app-port", "80" ]
+    depends_on:
+      - smartenergy.devicesapi
+    network_mode: "service:smartenergy.devicesapi"
+
+  #antivirus 
+  antivirus:
+    image: mkodockx/docker-clamav:alpine
+
+
+
+
+  device-db:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1401:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your+password123"
+ 
+  
+
+  
+
+     
+  #location 
+  smartenergy.locationapi:
+    image: ${DOCKER_REGISTRY-}smartenergylocationapi
+    build:
+      context: .
+      dockerfile: SmartEnergy.LocationAPI/Dockerfile
+    ports:
+        - "51000:50001"
+        - "44374:80"
+    depends_on:
+        - location-db
+
+
+  smartenergylocation-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "smartenergylocation", "-app-port", "80" ]
+    depends_on:
+      - smartenergy.locationapi
+    network_mode: "service:smartenergy.locationapi"
+
+  
+  location-db:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1402:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your+password123"
+
+  #microservice which contains rest of the project
+  smartenergy.microserviceapi:
+    image: ${DOCKER_REGISTRY-}smartenergymicroserviceapi
+    build:
+      context: .
+      dockerfile: SmartEnergy.MicroserviceAPI/Dockerfile
+    ports:
+        - "53000:50001"
+        - "44372:80"
+    depends_on:
+        - location-db
+
+  smartenergymicroservice-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "smartenergymicroservice", "-app-port", "80" ]
+    depends_on:
+      - smartenergy.microserviceapi
+    network_mode: "service:smartenergy.microserviceapi"
+
+  
+  smartenergy-db:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1403:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your+password123"
+

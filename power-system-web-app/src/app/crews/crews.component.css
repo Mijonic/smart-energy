@@ -1,0 +1,33 @@
+a { 
+    color: inherit; 
+} 
+
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .button-add {
+    width: 20%;
+    max-width: 80px;
+  }
+
+  td,th{
+    width:25%;
+  }
+  .table-container{
+    width:75%;
+  }
+
+
+  .loading-container {
+    position: relative;
+    min-height: 200px;
+  }
+
+  @media only screen and (max-width: 990px) {
+    .table-container {
+      margin: 10px;
+      width: 100%;
+    } 
+    }

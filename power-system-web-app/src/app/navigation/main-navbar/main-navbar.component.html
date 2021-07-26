@@ -1,0 +1,75 @@
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="z-index: 5;"> 
+  <a class="navbar-brand d-flex align-items-center justify-content-center">
+    <img src="../../assets/Images/smart-energy-logo.png" width="50" height="50" alt="logo">
+    Smart Energy
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+  <div class="collapse navbar-collapse fixed-left" id="navbarSupportedContent" >
+    <ul class="navbar-nav  mr-auto flex-column vertical-nav bg-dark" >
+      <li class="nav-item">
+        <a [routerLink]="['/dashboard']" class="nav-link d-flex align-items-center justify-content-left border-li-style"  >&nbsp;<mat-icon>dashboard</mat-icon> &nbsp; Dashboard</a>
+      </li>
+    
+      <li class="nav-item">
+        <a [routerLink]="['/incidents']" class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>warning</mat-icon> &nbsp; Incidents</a>
+      </li>
+      <li class="nav-item">
+        <a [routerLink]="['/work-plans']" class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>task</mat-icon>&nbsp;Work plans</a>
+      </li>
+      <li class="nav-item">
+        <a  [routerLink]="['/safety-documents']"  class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>lock</mat-icon> &nbsp;Safety documents</a>
+      </li>
+      <li class="nav-item">
+        <a [routerLink]="['/work-requests']" class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>work</mat-icon>&nbsp; Work requests</a>
+      </li>
+      <li class="nav-item">
+        <a  [routerLink]="['/map']" class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>map</mat-icon>&nbsp; Map</a> 
+      </li>
+      <li class="nav-item">
+        <a [routerLink]="['/crews']"  class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>engineering</mat-icon>&nbsp; Crews</a>
+      </li>
+    
+      <li class="nav-item">
+        <a [routerLink]="['/users']" class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>people_alt</mat-icon>&nbsp; People</a>
+      </li>
+
+      <li class="nav-item">
+        <a [routerLink]="['/devices']" class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>devices</mat-icon>&nbsp; Devices</a>
+      </li>
+      
+      <li class="nav-item">
+        <a [routerLink]="['/notifications']" class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>notifications</mat-icon>&nbsp; Notifications</a>
+      </li>
+      
+      <li class="nav-item">
+        <a [routerLink]="['/global-settings']" class="nav-link d-flex align-items-center justify-content-left border-li-style">&nbsp;<mat-icon>settings</mat-icon>&nbsp; Settings</a>
+      </li>
+
+      <div class="fill-div"></div>
+      
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li>
+        <div class="mr-4 mt-2 nav-div-username ">
+           <p class="nav-username">{{user.name}}</p> 
+           <p class=" nav-username">{{user.lastname}}</p> 
+        
+        </div>
+      </li>
+      <li class="nav-item dropleft">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img #avatar src="../../../assets/Images/zmaj.jpg" width="40" height="40" class="rounded-circle">
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a [routerLink]="['/edit-profile']" class="dropdown-item d-flex align-items-center justify-content-left" ><mat-icon>account_circle</mat-icon> Edit Profile</a>
+          <a class="dropdown-item d-flex align-items-center justify-content-left clickable" (click)="onLogout()" ><mat-icon>logout</mat-icon> Log Out</a>
+        </div>
+      </li>   
+    </ul>
+
+  </div>
+</nav>

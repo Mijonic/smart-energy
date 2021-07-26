@@ -1,0 +1,77 @@
+
+<div class="container-fluid p-3 m-1">
+    <div class="row" >
+        <div class="container rounded bg-white mt-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h1 *ngIf="isNew">Add crew</h1>
+                            <h1 *ngIf="isNew == false">Edit crew</h1>
+                        </div>
+                        <form [formGroup]="crewForm" (ngSubmit)="saveChanges()">
+                        <div class="row mt-2" >
+                            <div class="col-md-10">
+                                <mat-form-field class="w-100"> 
+                                    <mat-label>Crew name</mat-label>
+                                    <input matInput placeholder="Write a crew name" formControlName="crewNameControl">
+                                    <mat-error *ngIf="crewForm.hasError('required', 'crewNameControl')">
+                                        Crew name is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="button-add w-100">Save Changes</button>                       
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-3">
+                            <div class="col-md-6"> 
+                                <h2>Crew members</h2>
+                                <div
+                                cdkDropList
+                                #crewMembers="cdkDropList"
+                                [cdkDropListData]="crew.crewMembers"
+                                [cdkDropListConnectedTo]="[availableCrew]"
+                                class="crew-list"
+                                (cdkDropListDropped)="drop($event)"
+                                >
+                                    <div class='w-100 d-flex justify-content-center' *ngIf="isLoadingCrew">
+                                        <mat-spinner color='primary' [diameter]= "'50'"></mat-spinner>
+                                    </div>
+                                    <div class="crew-member-box" *ngFor="let member of crew.crewMembers" cdkDrag>
+                                       {{member.name}} &nbsp; {{member.lastname}} 
+                                        <a (click)="removeMember(member)" class="interact-crew"><mat-icon>remove</mat-icon></a>
+                                    </div>
+                                </div>
+                                <mat-error *ngIf="crew.crewMembers.length < 1 && showCrewError">
+                                    Crew must not be empty
+                                </mat-error>
+                            </div>
+
+                            <div class="col-md-6">
+                                <h2>Available crew members</h2>
+                                <div
+                                cdkDropList 
+                                #availableCrew="cdkDropList"
+                                [cdkDropListData]="unassignedCrewMembers"
+                                [cdkDropListConnectedTo]="[crewMembers]"
+                                class="crew-list"
+                                (cdkDropListDropped)="drop($event)">
+                                    <div class='w-100 d-flex justify-content-center' *ngIf="isLoadingUnassigned">
+                                        <mat-spinner color='primary' [diameter]= "'50'"></mat-spinner>
+                                    </div>
+                                    <div class="crew-member-box" *ngFor="let crewMember of unassignedCrewMembers" cdkDrag>
+                                        {{crewMember.name}} &nbsp; {{crewMember.lastname}}
+                                        <a (click)="addMember(crewMember)" class="interact-crew"><mat-icon>person_add</mat-icon></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

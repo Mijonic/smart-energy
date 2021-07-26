@@ -1,0 +1,14 @@
+
+<ng-container *ngIf="isHomePage == false" >
+    <div class="container-fluid page-wrapper">
+        <app-main-navbar></app-main-navbar>
+        <div class="content-container" [style.width.px]="containerLen" [style.min-height.px] = "containerHeight">
+            <router-outlet name="primary"></router-outlet>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="isHomePage">
+    <router-outlet name="front"></router-outlet>
+</ng-container>
+

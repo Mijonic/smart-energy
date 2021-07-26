@@ -1,0 +1,48 @@
+<div *ngIf = "notificationType == 'error'" class = "d-flex flex-row p-3 my-2 justify-content-between state-border notification error">
+    <div class="icon">
+       <mat-icon>cancel</mat-icon>
+    </div>
+    <div class="text">
+        <p> An error occured. We don't know what the heck is going on. </p>
+    </div>
+    <div class="timestamp">
+        <p>18:02:10 AM</p>
+    </div>
+</div>
+
+<div *ngIf = "notificationType == 'warning'" class = "d-flex flex-row p-3 my-2 state-border notification warning">
+    <div class="icon">
+        <mat-icon>warning</mat-icon>
+     </div>
+     <div class="text">
+         <p> Warning. We don't know what the heck is going on. </p>
+     </div>
+     <div class="timestamp">
+         <p>18:02:10 AM</p>
+     </div>
+</div>
+
+<div *ngIf = "notificationType == 'success'" class = "d-flex flex-row p-3 my-2 justify-content-between state-border notification success">
+    <div class="icon">
+        <mat-icon>check_circle</mat-icon>
+     </div>
+     <div class="text">
+         <p> Success. We don't know what the heck is going on. </p>
+     </div>
+     <div class="timestamp">
+         <p>18:02:10 AM</p>
+     </div>
+</div>
+
+<div *ngIf = "notificationType == 'info'" class = "d-flex flex-row p-3 my-2 justify-content-between state-border notification info">
+    <div class="icon">
+        <mat-icon>info</mat-icon>
+     </div>
+     <div class="text">
+         <p> Information. We don't know what the heck is going on. </p>
+         <!--<button class="button-add notif-more-button">Open</button>-->
+     </div>
+     <div class="timestamp">
+         <p>18:02:10 AM</p>
+     </div>
+</div>

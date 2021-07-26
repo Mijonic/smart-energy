@@ -1,0 +1,156 @@
+
+  <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+    <div class="loading-shade">
+      <mat-spinner color='primary' [diameter]= "'120'" ></mat-spinner>
+    </div>
+  </div>
+
+
+
+<div class="container-fluid p-3 m-1 pr-4" [hidden]="isLoading">
+    <div class="mat-elevation-z8 mt-4">
+      <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>more_vert</mat-icon>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <form [formGroup]="incidentForm">
+          <div class="row">
+            <div class="col-md-12">
+              <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput formControlName="searchControl" (keyup.enter)="reload()"  on-focusout="reload()" placeholder="Search for anything.." #input> 
+              </mat-form-field>
+            </div>
+          </div> 
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field appearance="fill">
+                <mat-label>Filter</mat-label>
+                <mat-select formControlName="filterControl" (selectionChange)="reload()" >
+                  <mat-option *ngFor="let filter of filterIncident" [value]="filter.value">{{filter.filter}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 pt-3 d-flex justify-content-center">
+              <mat-radio-group  formControlName="documentOwnerControl" (change)="reload()" aria-label="Select an option">
+                <mat-radio-button value="all">All</mat-radio-button>&nbsp;&nbsp;&nbsp;
+                <mat-radio-button value="mine">Only mine</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+
+            <div class="col-md-4 pb-3 d-flex justify-content-end"> 
+              <button [routerLink]="['/incident']" class="button-add pt-2 d-flex justify-content-center"><mat-icon>add</mat-icon></button> 
+            </div>
+          </div>
+      </form>
+    </mat-expansion-panel>
+  </div>  
+    <div class="row"> 
+    <div class="col-md-12">
+      <div class="mat-elevation-z8 mt-n1 table-responsive">
+        <table mat-table [dataSource]="dataSource" matSort
+        matSortActive="id" matSortDisableClear matSortDirection="asc"
+        (matSortChange)="resetPaging()"> 
+      
+          <!-- ID Column -->
+          <ng-container matColumnDef="action" sticky >
+            <th mat-header-cell *matHeaderCellDef >  </th>
+            <!--Change this-->
+            <td mat-cell *matCellDef="let row"><a [routerLink]="['/incident/basic-info', row.id]"><mat-icon>edit</mat-icon></a><a [routerLink]="['/dashboard']"><mat-icon>delete</mat-icon></a></td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="id" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.id}}</td>
+            </ng-container>
+      
+          <!-- Progress Column -->
+          <ng-container matColumnDef="type" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+            <td mat-cell *matCellDef="let row"> {{row.workType}} </td>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Priority </th>
+            <td mat-cell *matCellDef="let row"> {{row.priority}} </td>
+          </ng-container>
+      
+          <!-- Color Column -->
+          <ng-container matColumnDef="confirmed">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Confirmed </th>
+            <td mat-cell *matCellDef="let row" > {{row.confirmed}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let row"> {{row.incidentStatus}} </td>
+          </ng-container>
+
+          <!-- Start Date collumn -->
+          <ng-container matColumnDef="ETA">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Estimated Time </th>
+            <td mat-cell *matCellDef="let row" class="mat-column-dates"> {{display.getDateDisplayIncident(row.eta)}} </td>
+          </ng-container>
+
+          <!-- End Date collumn -->
+          <ng-container matColumnDef="ATA">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Actual Time </th>
+            <td mat-cell *matCellDef="let row" > {{display.getDateDisplayIncident(row.ata)}} </td>
+          </ng-container>
+
+           <!-- End Date collumn -->
+           <ng-container matColumnDef="incidentDateTime">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Incident Occurred</th>
+            <td mat-cell *matCellDef="let row" > {{display.getDateDisplayIncident(row.incidentDateTime)}} </td>
+          </ng-container>
+          
+          <!-- Created by collumn -->
+          <ng-container matColumnDef="ETR">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ETR </th>
+            <td mat-cell *matCellDef="let row" > {{display.getTimeDisplayIncidentETR(row.etr)}} </td>
+          </ng-container>
+
+       
+
+          <!-- Phone no collumn -->
+          <ng-container matColumnDef="voltageLevel">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Voltage Level</th>
+            <td mat-cell *matCellDef="let row" > {{row.voltageLevel}} </td>
+          </ng-container>
+
+          <!-- Creation date collumn -->
+          <ng-container matColumnDef="plannedWork">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Planned Work</th>
+            <td mat-cell *matCellDef="let row" > {{display.getDateDisplayIncident(row.workBeginDate)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="solveIncident">
+            <th mat-header-cell *matHeaderCellDef > Solve Incident</th>
+            <td mat-cell *matCellDef="let row" > <a class="btn" (click)="assignIncidentToUser(row.id)"><mat-icon>handyman</mat-icon></a> </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      
+         
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">There are no incidents</td>
+          </tr>
+
+        </table>
+      </div> 
+        <div class="row">
+          <div class="col-md-12 mt-0 ">
+            <div class="mat-elevation-z8">
+              <mat-paginator [pageSizeOptions]="[3, 5, 10, 15, 20]"></mat-paginator> 
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>

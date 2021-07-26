@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  smartenergy.devicesapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+  smartenergy.locationapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+
+  smartenergy.microserviceapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+

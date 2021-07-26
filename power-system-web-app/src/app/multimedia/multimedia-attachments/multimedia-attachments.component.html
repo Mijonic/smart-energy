@@ -1,0 +1,49 @@
+<div class="container mt-3 w-50" appDnd (fileDropped)="onFileDropped($event)">
+    <input type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event)" />
+    <img class="mb-1" src="assets/Images/dnd/ic-upload-file.svg" alt="">
+    <h3>Drag and drop file</h3>
+    <h3>or</h3>
+    <h3>Click here</h3>
+  </div>
+  <div class="files-list">
+    <div class="single-file w-75 m-auto" *ngFor="let fileUpload of files; let i = index">
+      <img src="assets/Images/dnd/ic-file.svg" width="45px" alt="file">
+      <div class="info">
+        <h4 class="name">
+          {{ fileUpload.file?.name }}
+        </h4>
+        <p class="size">
+          {{ formatBytes(fileUpload.file.size) }}
+        </p>
+
+        <app-upload-progress [progress]="fileUpload.progress"></app-upload-progress>
+
+      </div>
+      <img src="assets/Images/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file" (click)="deleteFile(fileUpload)">
+    </div>
+  </div>
+
+
+  <div class="row pl-2 pb-2 pt-2">
+    <div class="col-md-12">
+      <h1>Attachments:</h1>
+    </div>
+  </div>
+
+  <div class="files-list p-2" *ngIf="isLoading == false">
+    <div class="single-file w-100 m-auto mb-1 border border-dark" *ngFor="let attachment of multimediaAttachments" >
+      <img src="assets/Images/dnd/ic-file.svg" width="45px" alt="file">
+      <div class="info">
+        <h4 class="name">
+          {{attachment.url}}
+        </h4>
+      </div>
+      <a class="clickable" (click)="downloadFile(attachment.url)" ><mat-icon>file_download</mat-icon></a>
+      <a class="clickable" (click)="deleteFileAttachment(attachment.url)"><mat-icon>delete_forever</mat-icon></a>
+      
+    </div>
+  </div>
+
+  <div class='w-100 d-flex justify-content-center'*ngIf="isLoading">
+    <mat-spinner color='primary' [diameter]= "'100'" ></mat-spinner>
+  </div>

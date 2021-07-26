@@ -1,0 +1,82 @@
+
+<div class="container-fluid p-3 m-1">
+        <div class="row" >
+                
+            <div class="col-md-4 mt-3">
+                <div class="content dashboard-container">
+                    <a href="" class="nav-item nav-link d-flex align-items-center justify-content-left text-edit ">&nbsp;<mat-icon class="mat-icon-styled">warning</mat-icon> &nbsp;My Incidents</a>
+                    <mat-spinner style="margin-left: 35%; margin-top: 8%;" [diameter]="'100'" *ngIf="isLoadingWorkReq"></mat-spinner> 
+
+                   <div class="dashboard-div-p-l">
+                        <p><b>{{incidentStats.planned}}</b> Planned</p>
+                        <p><b>{{incidentStats.unplanned}}</b> Unplanned</p>
+                        <p><b>{{incidentStats.resolved}}</b> Resolved</p>
+                        <p><b>{{incidentStats.unresolved}}</b> Unresolved</p>
+                   </div>
+
+                   <div class="dashboard-div-p-r">
+                    <p style="text-align: center;">Total Incidents</p>
+                    <p style="text-align: center; font-weight: bold; font-size: 30px; color: #cc0000;">{{incidentStats.total}}</p>
+                    
+                   </div>
+
+                </div>
+            </div>
+            <div class="col-md-4 mt-3">
+                <div class="content dashboard-container">
+                    <a href="" class="nav-item nav-link d-flex align-items-center justify-content-left text-edit ">&nbsp;<mat-icon class="mat-icon-styled">task</mat-icon> &nbsp;My Work Plans</a>
+                    <div class="dashboard-div-p-l" >
+                         <p><b>0</b> Drafts</p>
+                         <p><b>3</b> Canceled</p>
+                         <p><b>2</b> Executing</p>
+                         <p><b>1</b> Completed</p>
+                    </div>
+ 
+                    <div class="dashboard-div-p-r" >
+                     <p style="text-align: center;">Total Work Plans</p>
+                     <p style="text-align: center; font-weight: bold; font-size: 30px; color: #2db300; ;">6</p>
+                     
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-md-4 mt-3">
+                <div class="content dashboard-container">
+                    
+                    <a class="nav-item nav-link d-flex align-items-center justify-content-left text-edit">&nbsp;<mat-icon>work</mat-icon> &nbsp; My Work Requests</a>
+                  
+                        <mat-spinner style="margin-left: 35%; margin-top: 8%;" [diameter]="'100'" *ngIf="isLoadingWorkReq"></mat-spinner> 
+                  
+                   <div class="dashboard-div-p-l"  *ngIf="isLoadingWorkReq == false">
+                        <p><b>{{workReqStats.draft}}</b> Drafts</p>
+                        <p><b>{{workReqStats.cancelled}}</b> Canceled</p>
+                        <p><b>{{workReqStats.denied}}</b> Denied</p>
+                        <p><b>{{workReqStats.approved}}</b> Completed</p>
+                   </div>
+
+                   <div class="dashboard-div-p-r"  *ngIf="isLoadingWorkReq == false" >
+                    <p style="text-align: center;">Total Work Requests</p>
+                    <p style="text-align: center; font-weight: bold; font-size: 30px; color: yellow; ;">{{workReqStats.total}}</p>
+                    
+                   </div>
+                </div>
+            </div>
+        
+
+        </div>
+
+        
+
+        <div class="row">
+
+            <div class="col-md-7 mt-5 dashboard-container">
+                <div>  <apx-chart [series]="chartOptionsArea.series" [chart]="chartOptionsArea.chart" [title]="chartOptionsArea.title" [labels]="chartOptionsArea.labels"  ></apx-chart></div>
+            </div>
+
+            <div class="col-md-5 mt-5 dashboard-container">
+                
+                <div>  <apx-chart [series]="chartOptionsPie.series" [chart]="chartOptionsPie.chart" [title]="chartOptionsPie.title" [labels]="chartOptionsPie.labels"  ></apx-chart></div>
+            </div>
+
+        </div>
+    </div>

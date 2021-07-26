@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-md-12">
+        <nav mat-tab-nav-bar animationDuration="400ms"  mat-stretch-tabs>
+            <a mat-tab-link
+            *ngFor="let link of navLinks"
+            [routerLink]="link.path"
+            routerLinkActive #rla="routerLinkActive"
+            [routerLinkActiveOptions]="{exact:true}"
+            [active]="rla.isActive"
+            [disabled] = 'link.isDisabled'> {{ link.label }}
+            </a>
+        </nav>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+

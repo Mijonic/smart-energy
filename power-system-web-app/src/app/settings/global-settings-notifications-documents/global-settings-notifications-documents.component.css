@@ -1,0 +1,25 @@
+.example-section {
+    margin: 12px 0;
+  }
+
+.example-margin {
+    margin: 0 12px;
+    display: block;
+    text-align: left;
+}
+
+.checkbox-div{
+    margin: 0 auto;
+}
+
+.save-button
+{
+    text-align: center;
+}
+
+@media only screen and (max-width: 1080px) {
+    .button-add {
+        width: 30%;
+    }
+    
+}

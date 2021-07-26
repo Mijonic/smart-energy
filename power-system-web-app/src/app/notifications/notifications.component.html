@@ -1,0 +1,79 @@
+<div class="container-fluid p-3 m-1">
+   <div class="row" >
+        
+        <div class="col-3">
+            <div class="notifications-nav-menu">
+                <mat-selection-list [multiple]="false">
+                    <mat-list-option>
+                        <div class="flex-row">
+                            All Notifications
+                        </div>
+                    </mat-list-option>
+
+                    <mat-list-option>
+                        <div class="flex-row">
+                            Unread Notifications
+                        </div>
+                    </mat-list-option>
+
+                    <mat-list-option>
+                        <div class="flex-row">
+                            Success&nbsp;&nbsp;&nbsp;
+                            <mat-icon class="icon-success">check_circle</mat-icon>
+                        </div>
+                    </mat-list-option>
+
+                    <mat-list-option>
+                        <div class="flex-row"> 
+                            Errors&nbsp;&nbsp;&nbsp;
+                            <mat-icon class="icon-error">cancel</mat-icon>
+                        </div>
+                    </mat-list-option>
+
+                    <mat-list-option>
+                        <div class="flex-row">
+                            Warnings&nbsp;&nbsp;&nbsp;
+                            <mat-icon class="icon-warning">warning</mat-icon>
+                        </div>
+                    </mat-list-option>
+
+                    <mat-list-option>
+                        <div class="flex-row">
+                            Info&nbsp;&nbsp;&nbsp;
+                            <mat-icon class="icon-info">info</mat-icon>
+                        </div>
+                    </mat-list-option>
+
+                </mat-selection-list>
+            </div>
+        </div>
+
+        <div class="col-9">
+            <div class="notifications-div">
+                <div *ngFor="let date of dates" class="notification-by-date-div">
+                    <div class="date">{{date}}</div>
+                   <!-- <p-messages [(value)]="msgs1" [enableService]="false" [closable]="false"></p-messages>-->
+                   <app-notification [notificationType]="'error'"></app-notification>
+                   <app-notification [notificationType]="'info'"></app-notification>
+                   <app-notification [notificationType]="'warning'"></app-notification>
+                   <app-notification [notificationType]="'success'"></app-notification>
+                </div>
+                <p-messages severity="info">
+                    <ng-template pTemplate>
+                        <img src="assets/showcase/images/demo/organization/walter.jpg" width="32" />
+                        <span class="custom-message">I am the one who knocks.</span>
+                    </ng-template>
+                </p-messages>
+                <p-scrollTop target="parent" [threshold]="100"></p-scrollTop>
+            </div>
+            <div class="buttons-div">
+                <button class="button-add notif-button">Mark all as read</button>
+                <button class="button-add notif-button">Clear all</button>
+            </div>
+            <p-messages severity="info">
+                    <span class="custom-message">I am the one who knocks.</span>
+                
+            </p-messages>
+        </div>
+    </div>
+</div>

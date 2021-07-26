@@ -1,0 +1,128 @@
+
+<div class="container-fluid" style="width: 90%;">
+    <div class="row" >
+      <div class="container rounded bg-white mt-5">
+
+        <!--
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-start">
+                <h1 class="p-3 pb-3">Checklist</h1>
+            </div>
+         </div>
+         -->
+
+         <div class="row">
+            <div class="col-md-12 d-flex justify-content-start">
+                <h1 class="p-3 pb-5" *ngIf="isNew">New checklist</h1>
+                <h1 class="p-3 pb-5" *ngIf="isNew == false">Edit checklist</h1>
+            </div>
+         </div>
+         <div class='w-100 d-flex justify-content-center '*ngIf="load">
+          <div class="loading-shade">
+            <mat-spinner color='primary' [diameter]= "'120'" ></mat-spinner>
+          </div>
+        </div>
+       
+        
+        <form [formGroup]="newChecklistForm" (ngSubmit)="onSave()">
+
+        
+     
+
+         <div class="row"  >
+            <div class="col-md-12">
+                <div class="p-3 py-5">
+                    <mat-form-field class="w-100 m-auto" appearance="fill">
+                        <mat-label>All work operations completed?</mat-label>
+                        <mat-select required formControlName="operationCompletedControl">
+                            <mat-option value="true">Completed</mat-option>
+                            <mat-option value="false">Not completed</mat-option>
+                            <mat-error *ngIf="newChecklistForm.hasError('required', 'operationCompletedControl')">
+                                Required field, please select.
+                              </mat-error>
+                           
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row"  >
+            <div class="col-md-12">
+                <div class="p-3 py-5">
+                    <mat-form-field class="w-100 m-auto" appearance="fill">
+                        <mat-label>All tags removed?</mat-label>
+                        <mat-select required formControlName="tagsRemovedControl">
+                            <mat-option value="true">Removed</mat-option>
+                            <mat-option value="false">Not removed</mat-option>
+                            <mat-error *ngIf="newChecklistForm.hasError('required', 'tagsRemovedControl')">
+                                Required field, please select.
+                              </mat-error>
+                           
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row"  >
+            <div class="col-md-12">
+                <div class="p-3 py-5">
+                    <mat-form-field class="w-100 m-auto" appearance="fill">
+                        <mat-label>Grounding removed?</mat-label>
+                        <mat-select required formControlName="groundingRemovedControl">
+                            <mat-option value="true">Removed</mat-option>
+                            <mat-option value="false">Not removed</mat-option>
+                            <mat-error *ngIf="newChecklistForm.hasError('required', 'groundingRemovedControl')">
+                                Required field, please select.
+                              </mat-error>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row"  >
+            <div class="col-md-12">
+                <div class="p-3 py-5">
+                    <mat-form-field class="w-100 m-auto" appearance="fill">
+                        <mat-label>Ready for service?</mat-label>
+                        <mat-select  required formControlName="readyControl">
+                            <mat-option value="true">Ready</mat-option>
+                            <mat-option value="false">Not ready</mat-option>
+                            <mat-error *ngIf="newChecklistForm.hasError('required', 'readyControl')">
+                                Required field, please select.
+                              </mat-error>
+                            
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-md-12">                   
+            <div class="save-button" >
+                <button type="reset" [routerLink]="['/safety-documents']" class="button-add button-style"  style="float: right;">Cancel</button>                       
+            </div>
+
+            <div class="save-button" >
+                <button type="submit" class="button-add button-style"  style="float: right;" >Save</button>  
+                          
+            </div>
+                   
+         </div>
+
+         </form>
+    
+          
+
+
+     
+      </div>
+    </div>
+  </div>
+

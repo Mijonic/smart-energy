@@ -1,0 +1,102 @@
+<h1 mat-dialog-title>Select device</h1>
+<div mat-dialog-content > 
+    <div class="container-fluid p-3 m-1">
+        <div class="row"  >
+            <div class="col-md-12">
+                <div class="mat-elevation-z8 mt-4">
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>more_vert</mat-icon>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field class="w-100">
+                                <mat-label>Search</mat-label>
+                                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input> 
+                                </mat-form-field>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-8">
+                                <mat-form-field class="w-100">
+                                <mat-label>Filter</mat-label>
+                                <mat-select [formControl]="toppings" multiple>
+                                    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                                </mat-select>
+                                </mat-form-field>
+                            </div>
+                            
+                        </div>
+                    </mat-expansion-panel>
+                </div>  
+                <div class="row"> 
+                    <div class="col-md-12">
+                        <div class="mat-elevation-z8 mt-n1 table-responsive">
+                            <table mat-table [dataSource]="dataSource" matSort> 
+                            
+                                <!-- ID Column -->
+                                <ng-container matColumnDef="id" >
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                                <td mat-cell *matCellDef="let row"> {{row.id}}</td>
+                                </ng-container>
+                            
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                                </ng-container>
+                            
+                                <!-- Type Column -->
+                                <ng-container matColumnDef="type">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                                <td mat-cell *matCellDef="let row"> {{row.deviceType}} </td>
+                                </ng-container>
+                            
+                                <!-- Coordinates Column -->
+                                <ng-container matColumnDef="coordinates">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Coordinates </th>
+                                <td mat-cell *matCellDef="let row" > {{display.getCoordinatesDisplay(row.location)}} </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="address">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Address</th>
+                                <td mat-cell *matCellDef="let row" > {{display.getAddressDisplay(row.location)}} </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Action </th>
+                                    <td mat-cell *matCellDef="let row" ><a class="clickable"><mat-icon>add_circle</mat-icon></a> </td>
+                                </ng-container>
+                                
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell" colspan="4">No data to display</td>
+                                </tr>
+
+                            </table>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-12 mt-0 ">
+                                <div class="mat-elevation-z8">
+                                    <mat-paginator [pageSizeOptions]="[5, 10, 15]"></mat-paginator> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    </div>
+    
+    
+<div mat-dialog-actions>
+  <button class="button-add" mat-button (click)="onCancelClick()">Cancel</button>
+</div>
+

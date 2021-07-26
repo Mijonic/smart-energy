@@ -1,0 +1,170 @@
+<div class="container-fluid">
+    <div class="row" >
+      <div class="container rounded bg-white mt-5">
+        
+        <div class="row">
+          <div class="col-md-12 d-flex justify-content-start">
+              <h1 class="p-3 pb-5" *ngIf="isNew">New safety document</h1>
+              <h1 class="p-3 pb-5" *ngIf="isNew == false">Edit safety document</h1>
+          </div>
+       </div>
+       <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+        <div class="loading-shade">
+          <mat-spinner color='primary' [diameter]= "'120'" ></mat-spinner>
+        </div>
+      </div>
+     
+      
+      <form [formGroup]="safetyDocumentForm" (ngSubmit)="onSave()">
+
+        <div class="row" >
+          <div class="col-md-6">
+            <div class="p-3">
+              <mat-form-field class="w-100">
+                <mat-label>Document type</mat-label>
+                <mat-select required formControlName="documentType">
+                  <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.value">{{documentType.display}}</mat-option>
+                </mat-select>
+                <mat-error >
+                  Please select document type.
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-3">
+              <mat-form-field class="w-100">
+                <mat-label>Status</mat-label>
+                <input matInput  value="Draft" formControlName="documentStatus">
+              </mat-form-field>
+            </div>
+           </div>
+        </div>
+
+        
+        <div class="row" >
+          <div class="col-md-6">
+            <div class="p-3 d-flex flex-row">
+              <mat-form-field class="w-100">
+                <mat-label>Work Plan</mat-label>
+                <input matInput  id="name" #name value="" required formControlName="workPlanID">
+                <mat-error *ngIf="safetyDocumentForm.hasError('required', 'workPlanID')">
+                  Please select work plan.
+                </mat-error>
+              </mat-form-field>
+              
+              <a [routerLink]="['/work-plan/basic-info', name.value]" class="clickable pl-1 pt-3">
+                <mat-icon >more_horiz</mat-icon>
+              </a>
+            </div>
+          </div>
+  
+          <div class="col-md-6">
+            <div class="p-3">
+                <mat-form-field appearance="legacy" class="w-100">
+                    <mat-label>Date/time created</mat-label>
+                    <input matInput [matDatepicker]="createdDate"  formControlName="createdOn">
+                    <mat-datepicker-toggle matSuffix [for]="createdDate" class="date-picker-image" ></mat-datepicker-toggle>
+                    <mat-datepicker  #createdDate ></mat-datepicker>
+                </mat-form-field>
+              </div>
+          </div>
+
+
+        </div>
+
+
+        <div class="row" >
+            <div class="col-md-6">
+
+                <div class="p-3">
+                    <mat-form-field class="w-100">
+                        <mat-label>Phone Number</mat-label>
+                        <input matInput formControlName="phone"  value="">
+                        <mat-error *ngIf="safetyDocumentForm.hasError('maxlength', 'phone')">
+                          Phone number must not exceed 30 characters.
+                        </mat-error>
+                      </mat-form-field>
+                  </div>
+               
+
+            </div>
+    
+            <div class="col-md-6">
+              <div class="p-3">
+                <mat-form-field class="w-100">
+                  <mat-label>Crew</mat-label>
+                  <input *ngIf="!isNew" matInput disabled value="{{safetyDocument.crewName}}">
+                  <input *ngIf="isNew" matInput disabled value="Unknown">
+                </mat-form-field>
+              </div>
+             </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-6">
+                <div class="p-3">
+                    <mat-form-field class="w-100">
+                        <mat-label>Details</mat-label>
+                        <textarea matInput formControlName="details" placeholder="Explain in depth this safety document"></textarea>
+                        <mat-error>
+                          Details must not exceed 100 characters.
+                        </mat-error>
+                      </mat-form-field>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3">
+                    <mat-form-field class="w-100">
+                        <mat-label>Notes</mat-label>
+                        <textarea matInput formControlName="notes" placeholder="Add additional info that will help"></textarea>
+                        <mat-error>
+                          Notes must not exceed 100 characters.
+                        </mat-error>
+                      </mat-form-field>
+                </div>
+            </div>
+         </div>
+
+
+         
+         <div class="row">
+            <div class="col-md-6">
+                <div class="p-3">
+                    <mat-form-field class="w-100">
+                      <mat-label>Created by</mat-label>
+                      <input matInput formControlName="createdBy"  value="">
+                    </mat-form-field>
+                  </div>
+            </div>
+
+            <div class="col-md-6">
+                             
+                <div class="save-button" >
+                    <button type="reset" [routerLink]="['/safety-documents']" class="button-add" style="float: left;">Cancel</button>                       
+                </div>
+
+                <div class="save-button" >
+                    <button type="submit" class="button-add" style="float: left;"  >Save</button>                       
+                </div>
+                       
+       
+             
+            </div>
+
+         
+           </div>
+
+           </form>
+     
+
+
+
+     
+      </div>
+    </div>
+  </div>
+

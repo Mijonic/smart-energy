@@ -1,0 +1,27 @@
+.upload-drop-zone {
+  height: 400px;
+  background: #e6e6e6;
+  border: 4px dashed lightgray;
+  width: 70%;
+  margin-left: 15%;
+  margin-top: 3%;
+}
+
+.uploaded-elements {
+  width: 60%;
+  margin-left: 20%;
+  margin-bottom: 50px;
+}
+
+.upload-field-icon {
+  text-align: center;
+  color: #8080ff;
+  padding-top: 17%;
+}
+
+
+.uploaded-image{
+  object-fit: cover;
+  width:200px;
+  height: 200px;
+}

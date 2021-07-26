@@ -1,0 +1,44 @@
+.report_form_div {
+    padding-top: 5%;
+    width: 100%;
+  }
+  .report_form {
+    width: 60%;
+  }
+  
+  .report_header {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
+  
+  .modal-content {
+    opacity: 1;
+  }
+  
+  .report_labels {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  p {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .modal-background {
+    padding-top: 5%;
+    background-color: #333333;
+    background-color: #1a1a1a;
+    width: 100%;
+    border: solid white 5px;
+  }
+  .registartion_labels {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .report-button {
+    text-align: center;
+  }
+  
+  .comment-box {
+    height: 100px;
+  }

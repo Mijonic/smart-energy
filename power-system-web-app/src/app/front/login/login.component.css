@@ -1,0 +1,131 @@
+.login_form_div {
+  padding-top: 5%;
+  width: 100%;
+}
+.login_form {
+  width: 60%;
+}
+
+.sign_in_header {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.modal-content {
+  opacity: 1;
+}
+
+.login_labels {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+a {
+  color: #007bff;
+}
+.modal-background {
+  padding-top: 5%;
+  background-color: #333333;
+  background-color: #1a1a1a;
+  width: 100%;
+  border: solid white 5px;
+}
+
+ul.social-network {
+  list-style: none;
+  display: inline;
+  margin-left: 0 !important;
+  padding: 0;
+}
+
+ul.social-network li {
+  display: inline;
+  margin: 0 5px;
+}
+
+.social-network a.icoGithub:hover {
+  background-color: #333;
+}
+
+.social-network a.icoFacebook:hover {
+  background-color: #c13584;
+}
+
+.social-network a.icoGoogle:hover {
+  background-color: #bd3518;
+}
+
+.social-network a.icoGithub:hover i,
+.social-network a.icoTwitter:hover i,
+.social-network a.icoGoogle:hover i {
+  color: #fff;
+}
+
+a.socialIcon:hover,
+.socialHoverClass {
+  color: #44bcdd;
+}
+
+.social-circle li a {
+  display: inline-block;
+  position: relative;
+  margin: 0 auto 0 auto;
+  border-radius: 50%;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+}
+
+.social-circle li i {
+  margin: 0;
+  line-height: 50px;
+  text-align: center;
+}
+
+.social-circle li a:hover i,
+.triggeredHover {
+  transform: rotate(360deg);
+  transition: all 0.2s;
+}
+
+.social-circle i {
+  color: #fff;
+  transition: all 0.8s;
+  transition: all 0.8s;
+}
+
+.social_network_div {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.home_return {
+  text-align: center;
+}
+
+.phone_icon {
+  font-size: 1.5vw;
+  margin-left: 5px;
+}
+
+.registartion_labels {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.invalid-feedback {
+  font-weight: bold;
+  font-size: 14px;
+  color: #ff4d4d;
+}
+
+.valid-feedback {
+  font-weight: bold;
+  font-size: 14px;
+  color: #1aff1a;
+}

@@ -1,0 +1,278 @@
+
+<div class="container mt-2 p-2" >
+
+    
+    <div class="wrapper-incident ">
+
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-start">
+                <h1 class="p-3 pb-5" *ngIf="isNew">New incident</h1>
+                <h1 class="p-3 pb-5" *ngIf="isNew == false">Edit incident</h1>
+            </div>
+         </div>
+         <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+          <div class="loading-shade">
+            <mat-spinner color='primary' [diameter]= "'120'" ></mat-spinner>
+          </div>
+        </div>
+        
+        <form [formGroup]="incidentForm" (ngSubmit)="onSave()">
+        <div class="row m-5">
+            
+            
+            <div class="col-md-6  mt-4">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field class="m-auto w-100" appearance="legacy">
+                        <mat-label>Type</mat-label>
+                        <mat-select  required formControlName="workType">
+                            <mat-option *ngFor="let documentType of documentTypes" value="{{documentType.value}}">{{documentType.display}}</mat-option>
+                          </mat-select>
+                          <mat-error >
+                            Please select type.
+                          </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+         
+
+
+        
+            <div class="col-md-6 mt-4" >
+                <div class="d-flex justify-content-center">
+                    <mat-form-field class="w-100">
+                        <mat-label>Affected Consumers</mat-label>
+                        <input matInput placeholder="Affected Consumers" value="{{affectedConsumers}}" readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row m-5">
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field class="m-auto w-100" appearance="legacy" class="w-100"> 
+                        
+                            <mat-label>Priority</mat-label>
+                            <input matInput placeholder="Priority" value="{{priority}}" readonly>
+                     
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                   
+
+                    <mat-form-field appearance="legacy" class="w-100">
+                        <mat-label>Outage Date</mat-label>
+                        <input matInput type="datetime-local" formControlName="incidentDateTime">
+                        <mat-error *ngIf="incidentForm.hasError('invalidDates', 'incidentDateTime')">
+                            Outage Date is required.
+                          </mat-error>
+                     </mat-form-field>
+                   
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row m-5">
+           
+
+            
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="legacy" class="w-100">
+                        <mat-label>Scheduled Date</mat-label>
+                        <input matInput  type="datetime-local" formControlName="workBeginDate">
+                          <mat-error *ngIf="incidentForm.hasError('invalidDates', 'ata')">
+                            Scheduled Date is required and can not be before Outage Date.
+                          </mat-error>
+                      
+                         
+                       
+                      </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="legacy" class="w-100">
+                        <mat-label>ETR</mat-label>
+                        <input *ngIf="incidentId != 0"  matInput type="time"  min='00:00' max= '12:00' formControlName="etr" class="without_ampm" value='{{incident.etr | date: "HH:mm"}}'>
+                        
+                        <input *ngIf="incidentId == 0"  matInput type="time"  min='00:00' max= '12:00' formControlName="etr" class="without_ampm">
+                        <mat-error>
+                            ETR is required.
+                          </mat-error>
+                        
+                         
+
+                      
+                      </mat-form-field>
+
+                     
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <div class="row m-5">
+
+            <div class="col-md-6 mt-4" >
+                <div class="d-flex justify-content-center">
+                    <mat-form-field class="w-100">
+                        <mat-label>Status</mat-label>
+                        <mat-select  required formControlName="incidentStatus">
+                            <mat-option *ngFor="let incidentStatus of incidentStatuses" value="{{incidentStatus.value}}">{{incidentStatus.display}}</mat-option>
+                          </mat-select>
+                          <mat-error >
+                            Please select status.
+                          </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+
+            
+            <div class="col-md-6 mt-4" >
+                <div class="d-flex justify-content-center">
+                    <mat-form-field class="w-100">
+                        <mat-label>Calls</mat-label>
+                        <input matInput placeholder="Calls" value="{{numberOfCalls}}" readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="row m-5">
+
+          
+            <div class="col-md-6 mt-4" >
+                <div class="d-flex justify-content-center">
+                    <mat-form-field class="w-100">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput formControlName="description" placeholder="More info about incident"></textarea>
+                        <mat-error>
+                            Description must not exceed 100 characters.
+                        </mat-error>
+                    </mat-form-field>
+                    
+                </div>
+            </div>
+
+
+            <div class="col-md-6 mt-4" >
+                <div class="d-flex justify-content-center">
+                    <mat-form-field class="w-100">
+                        <mat-label>Voltage [kV]</mat-label>
+                        <input matInput placeholder="Voltage [kV]" value="" formControlName="voltageLevel">
+                        <mat-error>
+                            Voltage has to be positive number.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+        <div class="row m-5">
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="legacy" class="w-100">
+                        <mat-label>ETA</mat-label>
+                        <input matInput type="datetime-local" formControlName="eta">
+                        <mat-error *ngIf="incidentForm.hasError('invalidDates', 'eta')">
+                            ETA is required and can not be before Outage Date.
+                          </mat-error>
+                       
+                      </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-center">
+                    <mat-form-field appearance="legacy" class="w-100">
+                        <mat-label>ATA</mat-label>
+                        <input matInput type="datetime-local" formControlName="ata">
+                        <mat-error *ngIf="incidentForm.hasError('invalidDates', 'ata')">
+                            ATA is required and can not be before Outage Date.
+                          </mat-error>
+                      
+                      </mat-form-field>
+                </div>
+            </div>
+
+
+        </div>
+        
+        
+        <div class="row m-5 pb-5">
+
+            <div class="col-md-4">
+                <div class="d-flex justify-content-center">
+                    <div class="mt-3">
+
+                       
+                        <span class="label label-primary mt-1 mr-1">Confirmed &nbsp;</span>
+                        <mat-slide-toggle   color="primary" formControlName="confirmed"></mat-slide-toggle>
+                        
+                        <!--
+                        <mat-slide-toggle #slide formControlName="enabled" color="primary">
+                            <span>{{slide.checked? 'Confirmed':'Not confirmed'}}</span>
+                       </mat-slide-toggle>
+                       -->
+                        
+                    </div>
+                   
+    
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="p-3">
+                    <div class="save-button" >
+                        <button type="submit" class="button-add" >Save</button>                       
+                    </div>
+                    <div class="save-button" >
+                        <button  type="reset" [routerLink]="['/incidents']" class="button-add" >Cancel</button>                       
+                    </div>
+            
+                   
+    
+                </div>
+            </div>
+
+           
+
+        </div>
+
+       
+    </form>
+
+
+
+
+
+    </div>
+
+</div>

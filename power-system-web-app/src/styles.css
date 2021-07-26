@@ -1,0 +1,124 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~leaflet/dist/leaflet.css";
+@import '~ngx-toastr/toastr';
+
+body {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 1px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.clickable {
+  cursor: pointer;
+}
+
+.content-container {
+  padding: 10px;
+  margin-left: 25%;
+  margin-right: 2px;
+  margin-top: 76px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  max-height: 1600px;
+}
+
+.page-wrapper {
+  background: rgb(242, 242, 242);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  z-index: -1;
+  height: max-content;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+@media only screen and (min-width: 990px) {
+  .content-container {
+    padding: 0;
+    margin: 0;
+    margin-top: 76px;
+    margin-left: 200px;
+  }
+}
+
+@media only screen and (max-width: 990px) {
+  .content-container {
+    padding: 0;
+    margin: 0;
+    margin-top: 76px;
+  }
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+.table-responsive > .mat-table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  display: table;
+  border-collapse: collapse;
+  margin: 0px;
+}
+.table-responsive > .mat-row,
+.mat-header-row {
+  display: table-row;
+}
+
+.table-responsive > .mat-cell,
+.mat-header-cell {
+  word-wrap: initial;
+  display: table-cell;
+  padding: 0px 5px;
+  line-break: unset;
+  width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+a {
+  color: inherit;
+}
+
+.button-add {
+  background-color: white;
+  border: 2px solid black;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 12px;
+  transition-duration: 0.4s;
+  width: 20%;
+}
+
+.button-add:hover {
+  background-color: black; /* Green */
+  color: white;
+}
+
+::ng-deep .cdk-overlay-container {
+  z-index: 9999;
+}

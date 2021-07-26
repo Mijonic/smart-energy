@@ -1,0 +1,85 @@
+
+<div class="container-fluid p-3 m-1">
+    <div class="row" >
+        <div class="container rounded bg-white mt-5">
+            <div class="row">
+                <div class="col-md-4 border-right">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <img class="rounded-circle mt-5" src="../../assets/Images/Person.jpg" width="90">
+                        <button class="button-add upload">Upload</button>   
+
+                        <div class="account-status-div"> <!--*ngIf="accountStatus == 'approved'"-->
+                            <mat-icon class="icon-approved" [inline]="true">check_circle</mat-icon>&nbsp;&nbsp; Approved account
+                        </div>
+
+                        <div class="account-status-div"> <!--*ngIf="accountStatus == 'rejected'"-->
+                            <mat-icon class="icon-rejected" [inline]="true">cancel</mat-icon>&nbsp;&nbsp; Rejected account
+                        </div>
+
+                        <div class="account-status-div"> <!--*ngIf="accountStatus == 'under-process'"-->
+                            <mat-icon class="icon-under-process" [inline]="true">warning</mat-icon>&nbsp;&nbsp; Account under process
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="text-right">Edit Profile</h2>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>First Name</mat-label>
+                                    <input matInput placeholder="Mikisa" value="Miki">
+                                  </mat-form-field>
+                            </div>
+
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Last Name</mat-label>
+                                    <input matInput placeholder="Mikacovic" value="Mikac">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Username</mat-label>
+                                    <input matInput placeholder="mikacPSI" value="mikimikisa123">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput placeholder="mikacjak@psi.su.svi" value="mikac@uns.ac.rs">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Role</mat-label>
+                                    <mat-select>
+                                        <mat-option value="crew">Crew member</mat-option>
+                                        <mat-option value="dispatcher">Dispatcher</mat-option>
+                                        <mat-option value="worker">Worker</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="save-button">
+                            <button class="button-add">Save Changes</button>                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

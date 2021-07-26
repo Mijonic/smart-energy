@@ -1,0 +1,58 @@
+:host {
+  width: 100%;
+}
+.text-edit {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 25px;
+  text-align: center;
+  color: white;
+}
+
+.dashboard-container {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid white;
+}
+
+.mat-icon-styled {
+  font-size: 25px;
+  margin-right: 5%;
+}
+
+.dashboard-div-p-l {
+  float: left;
+  width: 40%;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  margin-left: 8%;
+  font-size: 20px;
+  color: white;
+}
+
+.dashboard-div-p-r {
+  float: left;
+  width: 50%;
+  margin-left: 0px;
+  margin-top: 50px;
+  font-size: 20px;
+  color: white;
+}
+
+@media only screen and (max-width: 1350px) {
+  .dashboard-div-p-l {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (max-width: 1350px) {
+  .dashboard-div-p-l {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (max-width: 770px) {
+  .dashboard-div-p-l {
+    font-size: 20px;
+  }
+}

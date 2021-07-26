@@ -1,0 +1,60 @@
+
+  <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+    <div class="loading-shade">
+      <mat-spinner color='primary' [diameter]= "'200'" ></mat-spinner>
+    </div>
+  </div>
+
+<div class="container-fluid p-3 m-auto pr-4 table-container" [hidden]="isLoading">
+    <div class="row">
+        <div class="col-md-12 pb-3 d-flex justify-content-end"> 
+          <button [routerLink] = "['/crew']" class="button-add pt-1 d-flex justify-content-center"><mat-icon>add</mat-icon></button> 
+        </div>
+      </div>
+    <div class="row"> 
+    <div class="col-md-12">
+      <div class="mat-elevation-z8 mt-n1 table-responsive">
+        <table mat-table [dataSource]="filteredAndPagedCrews" matSort
+        matSortActive="crewName" matSortDisableClear matSortDirection="asc"
+        (matSortChange)="resetPaging()"> 
+      
+          <!-- ID Column -->
+          <ng-container matColumnDef="action" sticky>
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <!--Change this-->
+            <td mat-cell *matCellDef="let row"><a [routerLink]="['/crew', row.id]"><mat-icon>edit</mat-icon></a><a (click)="delete(row.id)" class="clickable"><mat-icon>delete</mat-icon></a></td>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="crewName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let row"> {{row.crewName}} </td>
+          </ng-container>
+      
+          <!-- Color Column -->
+          <ng-container matColumnDef="members">
+            <th mat-header-cell *matHeaderCellDef> Members </th>
+            <td mat-cell *matCellDef="let row" [style.color]="row.color">
+                 <ul style>
+                     <li *ngFor="let member of row.crewMembers">{{member.name}}&nbsp;{{member.lastname}}</li>
+                 </ul>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data to display</td>
+          </tr>
+        </table>
+      </div> 
+        <div class="row">
+          <div class="col-md-12 mt-0 ">
+            <div class="mat-elevation-z8">
+              <mat-paginator [pageSizeOptions]="[1, 3, 5, 10, 15, 20, 25, 30]"></mat-paginator> 
+            </div>
+          </div>
+        </div>
+    </div>

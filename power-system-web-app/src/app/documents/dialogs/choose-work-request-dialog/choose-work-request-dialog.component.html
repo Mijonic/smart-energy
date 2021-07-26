@@ -1,0 +1,112 @@
+<h1 mat-dialog-title>Choose work request</h1>
+<div mat-dialog-content>
+    <div class="row my-3"> 
+        <div class="col-md-12">
+          <div class="mat-elevation-z8 mt-n1 table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort> 
+          
+              <!-- ID Column -->
+              <ng-container matColumnDef="action" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                <!--Change this-->
+                <td mat-cell *matCellDef="let row"><a class="clickable" [mat-dialog-close]="row.id"><mat-icon>note_add</mat-icon></a></td>
+              </ng-container>
+              
+              <!-- Progress Column -->
+              <ng-container matColumnDef="id" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                <td mat-cell *matCellDef="let row"> {{row.id}}% </td>
+              </ng-container>
+              
+              <!-- Progress Column -->
+              <ng-container matColumnDef="type" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
+              </ng-container>
+          
+              <!-- Name Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+              </ng-container>
+          
+              <!-- Color Column -->
+              <ng-container matColumnDef="incident">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Incident </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="street">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Street </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+              <!-- Start Date collumn -->
+              <ng-container matColumnDef="startdate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Start date </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+              <!-- End Date collumn -->
+              <ng-container matColumnDef="enddate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> End date </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+               <!-- End Date collumn -->
+               <ng-container matColumnDef="createdBy">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Created by</th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+              <!-- Created by collumn -->
+              <ng-container matColumnDef="purpose">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Purpose </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+              <!-- End Date collumn -->
+              <ng-container matColumnDef="emergency">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Emergency </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+              <!-- Company collumn -->
+              <ng-container matColumnDef="company">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Company</th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+              <!-- Phone no collumn -->
+              <ng-container matColumnDef="phoneNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone number</th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+    
+              <!-- Creation date collumn -->
+              <ng-container matColumnDef="createdOn">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Created on</th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+              </ng-container>
+
+          
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          
+            </table>
+          </div> 
+            <div class="row">
+              <div class="col-md-12 mt-0 ">
+                <div class="mat-elevation-z8">
+                  <mat-paginator [pageSizeOptions]="[5, 10, 15]"></mat-paginator> 
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+</div>
+<div mat-dialog-actions>
+  <button class="button-add" mat-button (click)="onCancelClick()">Cancel</button>
+</div>
+
+

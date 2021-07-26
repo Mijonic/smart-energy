@@ -1,0 +1,145 @@
+
+  <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+    <div class="loading-shade">
+      <mat-spinner color='primary' [diameter]= "'200'" ></mat-spinner>
+    </div>
+  </div>
+<div class="container-fluid p-3 m-1 pr-4" [hidden]="isLoading">
+    <div class="mat-elevation-z8 mt-4">
+      <form [formGroup]="workRequestsForm">
+      <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>more_vert</mat-icon>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field>
+            <mat-label>Search</mat-label>
+            <input matInput formControlName="search" (keyup.enter)="reload()"  on-focusout="reload()" placeholder="Search for anything.." #input> 
+          </mat-form-field>
+        </div>
+      </div> 
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field >
+            <mat-label>Document status</mat-label>
+            <mat-select formControlName="documentStatus" (selectionChange)="reload()">
+              <mat-option *ngFor="let status of documentStatuses" [value]="status.value">{{status.status}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4 pt-3 d-flex justify-content-center">
+          <mat-radio-group formControlName="documentOwner" aria-label="Select an option" (change)="reload()">
+            <mat-radio-button color="primary" value="all">All</mat-radio-button>&nbsp;&nbsp;&nbsp;
+            <mat-radio-button color="primary" value="mine">Only mine</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="col-md-4 pb-3 d-flex justify-content-end"> 
+          <button type="button" [routerLink]="['/work-request']" class="button-add pt-2 d-flex justify-content-center"><mat-icon>add</mat-icon></button> 
+        </div>
+      </div>
+    </mat-expansion-panel>
+    </form>
+  </div>  
+    <div class="row"> 
+    <div class="col-md-12">
+      <div class="mat-elevation-z8 mt-n1 table-responsive">
+        <table mat-table [dataSource]="dataSource" matSort
+        matSortActive="id" matSortDisableClear matSortDirection="asc"
+        (matSortChange)="resetPaging()"> 
+      
+          <!-- Action Column -->
+          <ng-container matColumnDef="action" sticky>
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <!--Change this-->
+            <td mat-cell *matCellDef="let row"><a [routerLink]="['/work-request/basic-info', row.id]"><mat-icon>edit</mat-icon></a><a class="clickable" (click)="delete(row.id)"><mat-icon>delete</mat-icon></a></td>
+          </ng-container>
+
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+            <!--Change this-->
+            <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+          </ng-container>
+      
+          <!-- Progress Column -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+            <td mat-cell *matCellDef="let row"> {{row.documentType}} </td>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let row"> {{row.documentStatus}} </td>
+          </ng-container>
+      
+          <!-- Color Column -->
+          <ng-container matColumnDef="incident">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Incident ID </th>
+            <td mat-cell *matCellDef="let row" > {{row.incidentID}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="street">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Street </th>
+            <td mat-cell *matCellDef="let row" > {{row.street}} </td>
+          </ng-container>
+
+          <!-- Start Date collumn -->
+          <ng-container matColumnDef="startdate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Start date</th>
+            <td mat-cell *matCellDef="let row" > {{display.getDateDisplay(row.startDate)}} </td>
+          </ng-container>
+
+          <!-- End Date collumn -->
+          <ng-container matColumnDef="enddate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> End date</th>
+            <td mat-cell *matCellDef="let row" > {{display.getDateDisplay(row.endDate)}} </td>
+          </ng-container>
+
+
+          <!-- End Date collumn -->
+          <ng-container matColumnDef="emergency">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Emergency</th>
+            <td mat-cell *matCellDef="let row" > {{display.getBoolDisplay(row.isEmergency)}} </td>
+          </ng-container>
+
+          <!-- Company collumn -->
+          <ng-container matColumnDef="company">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Company</th>
+            <td mat-cell *matCellDef="let row" > {{row.companyName}} </td>
+          </ng-container>
+
+          <!-- Phone no collumn -->
+          <ng-container matColumnDef="phoneno">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone number</th>
+            <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
+          </ng-container>
+
+          <!-- Creation date collumn -->
+          <ng-container matColumnDef="creationdate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Created on</th>
+            <td mat-cell *matCellDef="let row" > {{display.getDateDisplay(row.createdOn)}} </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data to display</td>
+          </tr>
+        </table>
+      </div> 
+        <div class="row">
+          <div class="col-md-12 mt-0 ">
+            <div class="mat-elevation-z8">
+              <mat-paginator [pageSizeOptions]="[1, 5, 10, 15, 20, 25, 30]"></mat-paginator> 
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>

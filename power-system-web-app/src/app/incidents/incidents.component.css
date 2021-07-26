@@ -1,0 +1,43 @@
+:host {
+  width: 100%;
+  height: 100%;
+}
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td,
+th {
+  width: 9%;
+}
+
+a {
+  color: inherit;
+}
+
+.button-add {
+  background-color: white;
+  border: 2px solid black;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 12px;
+  transition-duration: 0.4s;
+  width: 20%;
+}
+
+.button-add:hover {
+  background-color: black; /* Green */
+  color: white;
+}
+
+td.mat-cell {
+  padding: 5px;
+}

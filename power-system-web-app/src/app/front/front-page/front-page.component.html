@@ -1,0 +1,23 @@
+
+
+<app-particles></app-particles>
+<app-register-login-navbar></app-register-login-navbar>
+<ng-template [ngIf]="showLogin">
+	<app-login></app-login>
+</ng-template>
+<ng-template [ngIf]="showRegister">
+	<app-registration></app-registration>
+</ng-template>
+<ng-template [ngIf]="showReportOutage">
+	<app-report-outage></app-report-outage>
+</ng-template>
+
+<div class="site-title">SMART ENERGY</div>
+<a><i class="fa fa-open" class="nav-link navbar_li_link" data-toggle="modal" #login data-target="#exampleModalCenter"  hidden="true"></i></a>
+<button (click)="activateReportOutage()" data-toggle="modal" data-target="#exampleModalCenter" class="button">
+	Report Outage<mat-icon class="phone_icon">phone</mat-icon>
+	<div class="button__horizontal"></div>
+	<div class="button__vertical"></div>
+</button>
+
+

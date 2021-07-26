@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    <div class="row" >
+      <div class="container rounded bg-white mt-5">
+
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-start">
+                <h1 class="p-3 pb-5">Switching instructions</h1>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-md-6">
+                <button class="button-add w-100" mat-button>Delete all</button>
+            </div>
+
+            <div class="col-md-6">
+                <button (click)="onAddNew()" class="button-add  w-100" mat-button>Add new</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <app-switching-instruction></app-switching-instruction>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-md-12">
+                <app-switching-instruction></app-switching-instruction>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-md-12">
+                <app-switching-instruction></app-switching-instruction>
+            </div>
+         </div>
+
+      </div>
+    </div>
+</div>

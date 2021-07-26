@@ -1,0 +1,84 @@
+.example-full-width {
+    width: 100%;
+  }
+
+.button-add{
+    background-color: white;
+    border: 2px solid black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 12px;
+    transition-duration: 0.4s;
+    width: 30%; 
+    padding: 4pt 0 4pt 0;
+}
+
+.save-button {
+    text-align: right;
+}
+
+.upload {
+    width: 40%;
+    margin-top: 20px;
+}
+
+.button-add:hover {
+    background-color: black; /* Green */
+    color: white;
+  }
+
+.account-status-div {
+    margin-top: 10px;
+}
+
+.icon-approved
+{
+    color: green;
+}
+
+.icon-rejected
+{
+    color: red;
+}
+
+.icon-under-process
+{
+    color: orange;
+}
+
+@media only screen and (max-width: 1080px) {
+    .button-add {
+        width: 30%;
+    }
+
+    .upload {
+        width: 50%;
+    }
+  }
+
+ @media only screen and (max-width: 780px) {
+    .save-button {
+        text-align: center;
+    }
+    
+    .button-add {
+        width: 30%;
+    }
+
+    .upload {
+        width: 30%;
+    }
+  }
+  
+@media only screen and (max-width: 500px) {
+    .save-button {
+        text-align: center;
+    }
+    
+    .upload {
+        width: 30%;
+    }
+}

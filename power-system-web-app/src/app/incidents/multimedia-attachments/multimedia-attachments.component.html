@@ -1,0 +1,22 @@
+
+    <div class="row">
+        <div class="col-12 " >
+            <div [fileUploadInputFor]="fileUploadQueue" class="upload-drop-zone"  title="Drag and Drop!">
+                <div class="upload-field-icon" ><mat-icon style="font-size: 80px;">add_photo_alternate</mat-icon></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="uploaded-elements">
+                <mat-file-upload-queue #fileUploadQueue
+                    [fileAlias]="'file'"
+                    [httpUrl]="'http://localhost:8180/jax-rs-jersey-application-sample'" multiple>
+
+                    <mat-file-upload  [file]="file" [id]="i" *ngFor="let file of fileUploadQueue.files; let i = index"></mat-file-upload>
+                </mat-file-upload-queue>
+            </div>
+        </div>
+    </div>

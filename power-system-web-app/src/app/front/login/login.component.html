@@ -1,0 +1,70 @@
+
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    
+ <div class='w-100 d-flex justify-content-center '*ngIf="isLoading">
+    <div class="loading-shade">
+      <mat-spinner color='primary' [diameter]= "'200'" ></mat-spinner>
+    </div>
+  </div>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        
+        <div class="modal-background">
+            <div class="d-flex justify-content-center sign_in_header">
+                <h2 style="font-size: 30px;">Sign in</h2>
+            </div>
+            <div class="d-flex justify-content-center login_form_div">
+                
+                <form  class="login_form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    
+                    <div class="form-group">
+                        <label class="login_labels" for="username">Username: </label>
+                        <input type="text" formControlName="username"
+                         [ngClass]="{'form-control':true, 'is-valid': isValid('username'), 'is-invalid': isInvalid('username')}" placeholder="Enter username" id="username">
+                        <div class="invalid-feedback">
+                            Please enter your username
+                        </div>
+                        <div class="valid-feedback">
+                            Looks good.
+                        </div>
+                    </div>
+            
+                    <div class="form-group">
+                        <label class="login_labels" for="password">Password: </label>
+                        <input type="password" formControlName="password"
+                         [ngClass]="{'form-control':true, 'is-valid': isValid('password'), 'is-invalid': isInvalid('password')}" placeholder="Enter password" id="password">
+                        <div class="invalid-feedback">
+                            Please enter your password
+                        </div>
+                        <div class="valid-feedback">
+                            Looks good.
+                        </div>
+                    </div>
+            
+                    <div></div>
+                    <div class="form-group">
+                        
+                          <a href="/" class="forgot_password">Forgot your password?</a>
+                           
+                    </div>
+            
+                    <button type="submit" class="btn btn-light">Login</button>
+                    <button hidden=true type="reset" #resetBtn>Reset</button> 
+                                    
+                    
+                    <div class="social_network_div">
+                        <ul class="social-network social-circle">
+                            <li><a href="#" class="icoGithub" title="Github"><i class="fab fa-github"></i></a></li>
+                            <li><a class="icoFacebook clickable" title="Facebook" (click)="loginFacebook()"><i class="fab fa-facebook"></i></a></li>
+                            <li><a class="icoGoogle clickable" title="Google" (click)="loginGoogle()"><i class="fab fa-google"></i></a></li>
+                        </ul>
+                    </div>
+                </form>
+                <button hidden=true  class="fa fa-close" data-dismiss="modal" type="button" #closeBtn></button>     
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,54 @@
+.button-add {
+  background-color: white;
+  border: 2px solid black;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 12px;
+  transition-duration: 0.4s;
+  width: 30%;
+  padding: 4pt 0 4pt 0;
+  margin-left: 50px;
+}
+
+.save-button {
+  text-align: right;
+}
+
+.button-add:hover {
+  background-color: black; /* Green */
+  color: white;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  width: 22px;
+  height: 22px;
+}
+
+.without_ampm::-webkit-datetime-edit-ampm-field {
+  display: none;
+}
+
+@media only screen and (max-width: 1080px) {
+  .button-add {
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 780px) {
+  .save-button {
+    text-align: center;
+  }
+
+  .button-add {
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .save-button {
+    text-align: center;
+  }
+}
