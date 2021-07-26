@@ -29,16 +29,16 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         private readonly MicroserviceDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IDeviceUsageService _deviceUsageService;
+        //private readonly IDeviceUsageService _deviceUsageService;
         private readonly IAuthHelperService _authHelperService;
         private readonly DaprClient _daprClient;
 
 
-        public SafetyDocumentService(MicroserviceDbContext dbContext, IMapper mapper, IDeviceUsageService deviceUsageService, IAuthHelperService authHelperService, DaprClient daprClient)
+        public SafetyDocumentService(MicroserviceDbContext dbContext, IMapper mapper, IAuthHelperService authHelperService, DaprClient daprClient)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-            _deviceUsageService = deviceUsageService;
+           // _deviceUsageService = deviceUsageService;
             _authHelperService = authHelperService;
             _daprClient = daprClient;
         }
@@ -133,43 +133,46 @@ namespace SmartEnergy.MicroserviceAPI.Services
         //SREDITI OVO
         public async Task<List<DeviceDto>> GetSafetyDocumentDevices(int safetyDocumentId)
         {
-            //SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages)
-            //                                                 .ThenInclude(x => x.Device)
-            //                                                 .ThenInclude(x => x.Location)
-            //                                                 .FirstOrDefault(x => x.ID == safetyDocumentId);
+            ////SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages)
+            ////                                                 .ThenInclude(x => x.Device)
+            ////                                                 .ThenInclude(x => x.Location)
+            ////                                                 .FirstOrDefault(x => x.ID == safetyDocumentId);
 
-            SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages).FirstOrDefault(x => x.ID == safetyDocumentId);
+            //SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages).FirstOrDefault(x => x.ID == safetyDocumentId);
 
-            if (sf == null)
-                throw new SafetyDocumentNotFoundException($"Safety document with id {safetyDocumentId} does not exist.");
+            //if (sf == null)
+            //    throw new SafetyDocumentNotFoundException($"Safety document with id {safetyDocumentId} does not exist.");
 
-            List<DeviceDto> safetyDocumentDevices = new List<DeviceDto>();
-            DeviceDto deviceDto = new DeviceDto();
-
-
-            foreach (DeviceUsage deviceUsage in sf.DeviceUsages)
-            {
-                try
-                {
-                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
-                    safetyDocumentDevices.Add(deviceDto);
-
-                }
-                catch (Exception e)
-                {
-                    throw new DeviceNotFoundException("Device service is unavailable right now.");
-                }
-
-                
-            }
+            //List<DeviceDto> safetyDocumentDevices = new List<DeviceDto>();
+            //DeviceDto deviceDto = new DeviceDto();
 
 
-            //List<Device> devices = new List<Device>();
+            //foreach (DeviceUsage deviceUsage in sf.DeviceUsages)
+            //{
+            //    try
+            //    {
+            //        deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
+            //        safetyDocumentDevices.Add(deviceDto);
 
-            //foreach (DeviceUsage d in sf.DeviceUsages)
-            //    devices.Add(d.Device);
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        throw new DeviceNotFoundException("Device service is unavailable right now.");
+            //    }
 
-            return safetyDocumentDevices;
+
+            //}
+
+
+            ////List<Device> devices = new List<Device>();
+
+            ////foreach (DeviceUsage d in sf.DeviceUsages)
+            ////    devices.Add(d.Device);
+
+            //return safetyDocumentDevices;
+
+
+            return new List<DeviceDto>();
 
 
 
@@ -209,7 +212,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             _dbContext.SaveChanges();
 
-            _deviceUsageService.CopyIncidentDevicesToSafetyDocument(safetyDocument.WorkPlanID, safetyDocument.ID);
+            //_deviceUsageService.CopyIncidentDevicesToSafetyDocument(safetyDocument.WorkPlanID, safetyDocument.ID);
 
             return _mapper.Map<SafetyDocumentDto>(safetyDocument);
         }
@@ -238,11 +241,11 @@ namespace SmartEnergy.MicroserviceAPI.Services
                 throw new SafetyDocumentInvalidStateException($"Safety document is in {state} state and cannot be edited.");
 
 
-
-            if(entity.WorkPlanID != existing.WorkPlanID)
-            {
-                _deviceUsageService.UpdateSafetyDocumentWorkPlan(entity.WorkPlanID, entity.ID);
-            }
+            ////bitnooo treba mi ovo
+            //if(entity.WorkPlanID != existing.WorkPlanID)
+            //{
+            //    _deviceUsageService.UpdateSafetyDocumentWorkPlan(entity.WorkPlanID, entity.ID);
+            //}
 
             entity.User = null;
 

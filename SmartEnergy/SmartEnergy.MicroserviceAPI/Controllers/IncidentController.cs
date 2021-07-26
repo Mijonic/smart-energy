@@ -56,6 +56,10 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             catch (DeviceNotFoundException dnf)
             {
                 return NotFound(dnf.Message);
+
+            }catch(DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
             }
         }
 

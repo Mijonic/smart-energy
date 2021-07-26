@@ -98,3 +98,35 @@ services:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "Your+password123"
 
+      
+
+
+  smartenergy.deviceusageapi:
+    image: ${DOCKER_REGISTRY-}smartenergydeviceusageapi
+    build:
+      context: .
+      dockerfile: ..\SmartEnergy.DeviceUsageAPI\Dockerfile
+    ports:
+        - "54000:50001"
+        - "44375:80"
+    depends_on:
+        - deviceUsage-db
+
+
+  smartenergydeviceusage-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "smartenergydeviceusageapi", "-app-port", "80" ]
+    depends_on:
+      - smartenergy.deviceusageapi
+    network_mode: "service:smartenergy.deviceusageapi"
+
+  deviceUsage-db:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1404:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your+password123"
+
+
+

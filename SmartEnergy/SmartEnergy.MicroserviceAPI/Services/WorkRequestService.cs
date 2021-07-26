@@ -27,19 +27,18 @@ namespace SmartEnergy.MicroserviceAPI.Services
         private readonly MicroserviceDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IIncidentService _incidentService;
-        private readonly IDeviceUsageService _deviceUsageService;
+        //private readonly IDeviceUsageService _deviceUsageService;
         private readonly IAuthHelperService _authHelperService;
         private readonly IMultimediaService _multimediaService;
         private readonly DaprClient _daprClient;
 
         public WorkRequestService(MicroserviceDbContext dbContext, IMapper mapper,
-            IIncidentService incidentService, IDeviceUsageService deviceUsageService,
-            IAuthHelperService authHelperService, IMultimediaService multimedia, DaprClient daprClient)
+            IIncidentService incidentService, IAuthHelperService authHelperService, IMultimediaService multimedia, DaprClient daprClient)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _incidentService = incidentService;
-            _deviceUsageService = deviceUsageService;
+           // _deviceUsageService = deviceUsageService;
             _authHelperService = authHelperService;
             _multimediaService = multimedia;
             _daprClient = daprClient;
@@ -47,36 +46,36 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         public void Delete(int id)
         {
-            WorkRequest wr = _dbContext.WorkRequests.Include( x => x.WorkPlan)
-                                                    .Include(x => x.WorkPlan.MultimediaAnchor)
-                                                    .Include(x => x.WorkPlan.StateChangeAnchor)
-                                                    .Include(x => x.WorkPlan.NotificationAnchor)
-                                                    .Include(x => x.MultimediaAnchor)
-                                                    .ThenInclude( x => x.MultimediaAttachments)
-                                                    .Include(x => x.NotificationsAnchor)
-                                                    .Include(x => x.StateChangeAnchor)
-                                                    .Include( x => x.DeviceUsage)
-                                                    .FirstOrDefault( x=> x.ID == id);
-            if (wr == null)
-                throw new WorkRequestNotFound($"Work request with id {id} does not exist.");
-            _dbContext.WorkRequests.Remove(wr);
-            List<string> files = new List<string>();
-            foreach (MultimediaAttachment att in wr.MultimediaAnchor.MultimediaAttachments)
-                files.Add(att.Url);
+            //WorkRequest wr = _dbContext.WorkRequests.Include( x => x.WorkPlan)
+            //                                        .Include(x => x.WorkPlan.MultimediaAnchor)
+            //                                        .Include(x => x.WorkPlan.StateChangeAnchor)
+            //                                        .Include(x => x.WorkPlan.NotificationAnchor)
+            //                                        .Include(x => x.MultimediaAnchor)
+            //                                        .ThenInclude( x => x.MultimediaAttachments)
+            //                                        .Include(x => x.NotificationsAnchor)
+            //                                        .Include(x => x.StateChangeAnchor)
+            //                                        .Include( x => x.DeviceUsage)
+            //                                        .FirstOrDefault( x=> x.ID == id);
+            //if (wr == null)
+            //    throw new WorkRequestNotFound($"Work request with id {id} does not exist.");
+            //_dbContext.WorkRequests.Remove(wr);
+            //List<string> files = new List<string>();
+            //foreach (MultimediaAttachment att in wr.MultimediaAnchor.MultimediaAttachments)
+            //    files.Add(att.Url);
 
-            //Remove anchors
-            _dbContext.MultimediaAnchors.Remove(wr.MultimediaAnchor);
-            _dbContext.NotificationAnchors.Remove(wr.NotificationsAnchor);
-            _dbContext.StateChangeAnchors.Remove(wr.StateChangeAnchor);
-            //Remove work plan anchors
-            _dbContext.MultimediaAnchors.Remove(wr.WorkPlan.MultimediaAnchor);
-            _dbContext.NotificationAnchors.Remove(wr.WorkPlan.NotificationAnchor);
-            _dbContext.StateChangeAnchors.Remove(wr.WorkPlan.StateChangeAnchor);
+            ////Remove anchors
+            //_dbContext.MultimediaAnchors.Remove(wr.MultimediaAnchor);
+            //_dbContext.NotificationAnchors.Remove(wr.NotificationsAnchor);
+            //_dbContext.StateChangeAnchors.Remove(wr.StateChangeAnchor);
+            ////Remove work plan anchors
+            //_dbContext.MultimediaAnchors.Remove(wr.WorkPlan.MultimediaAnchor);
+            //_dbContext.NotificationAnchors.Remove(wr.WorkPlan.NotificationAnchor);
+            //_dbContext.StateChangeAnchors.Remove(wr.WorkPlan.StateChangeAnchor);
 
-            _dbContext.SaveChanges();
+            //_dbContext.SaveChanges();
 
-            foreach (string file in files)
-                _multimediaService.DeleteWorkRequestFileOnDisk(id, file);
+            //foreach (string file in files)
+            //    _multimediaService.DeleteWorkRequestFileOnDisk(id, file);
         }
 
         public WorkRequestDto Get(int id)
@@ -98,54 +97,56 @@ namespace SmartEnergy.MicroserviceAPI.Services
         //SREDITI OVO
         public async Task<List<DeviceDto>> GetWorkRequestDevices(int workRequestId)
         {
-            //WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage)
-            //                                                 .ThenInclude(x => x.Device)
-            //                                                 .ThenInclude(x => x.Location)
-            //                                                 .FirstOrDefault(x => x.ID == workRequestId);
+            ////WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage)
+            ////                                                 .ThenInclude(x => x.Device)
+            ////                                                 .ThenInclude(x => x.Location)
+            ////                                                 .FirstOrDefault(x => x.ID == workRequestId);
 
-            WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage).FirstOrDefault(x => x.ID == workRequestId);
+            //WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage).FirstOrDefault(x => x.ID == workRequestId);
 
-            if (workRequest == null)
-                throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist.");
-
-
-            List<DeviceDto> workRequestDevices = new List<DeviceDto>();
-            DeviceDto deviceDto = new DeviceDto();
+            //if (workRequest == null)
+            //    throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist.");
 
 
-            foreach (DeviceUsage deviceUsage in workRequest.DeviceUsage)
-            {
-                try
-                {
-                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
-
-                }
-                catch (Exception e)
-                {
-                    throw new DeviceNotFoundException("Device service is unavailable right now.");
-                }
-
-                //try
-                //{
-                //    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{deviceDto.LocationID}");
-                //    deviceDto.Location = location;
-
-                //}
-                //catch (Exception e)
-                //{
-                //    throw new LocationNotFoundException("Location service is unavailable right now.");
-                //}
-
-                workRequestDevices.Add(deviceDto);
+            //List<DeviceDto> workRequestDevices = new List<DeviceDto>();
+            //DeviceDto deviceDto = new DeviceDto();
 
 
+            //foreach (DeviceUsage deviceUsage in workRequest.DeviceUsage)
+            //{
+            //    try
+            //    {
+            //        deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
 
-            }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        throw new DeviceNotFoundException("Device service is unavailable right now.");
+            //    }
+
+            //    //try
+            //    //{
+            //    //    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{deviceDto.LocationID}");
+            //    //    deviceDto.Location = location;
+
+            //    //}
+            //    //catch (Exception e)
+            //    //{
+            //    //    throw new LocationNotFoundException("Location service is unavailable right now.");
+            //    //}
+
+            //    workRequestDevices.Add(deviceDto);
 
 
-            return workRequestDevices;
+
+            //}
 
 
+            //return workRequestDevices;
+
+
+
+            return new  List<DeviceDto>();
 
         }
 
@@ -201,7 +202,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             _dbContext.SaveChanges();
 
-            _deviceUsageService.CopyIncidentDevicesToWorkRequest(workRequest.IncidentID, workRequest.ID);
+            //_deviceUsageService.CopyIncidentDevicesToWorkRequest(workRequest.IncidentID, workRequest.ID);
 
             return _mapper.Map<WorkRequestDto>(workRequest);
         }

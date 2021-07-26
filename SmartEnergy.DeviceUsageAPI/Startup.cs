@@ -11,9 +11,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SmartEnergy.Contract.Interfaces;
-using SmartEnergy.MicroserviceAPI.Infrastructure;
-using SmartEnergy.MicroserviceAPI.Mapping;
-using SmartEnergy.MicroserviceAPI.Services;
+using SmartEnergy.DeviceUsageAPI.Infrastructure;
+using SmartEnergy.DeviceUsageAPI.Mapping;
+using SmartEnergy.DeviceUsageAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +22,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SmartEnergy.MicroserviceAPI
+namespace SmartEnergy.DeviceUsageAPI
 {
     public class Startup
     {
@@ -60,11 +60,11 @@ namespace SmartEnergy.MicroserviceAPI
                };
            });
             services.AddControllers().AddDapr().AddJsonOptions(options =>
-                                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())); 
+                                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-            services.AddDbContext<MicroserviceDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MicroserviceDatabase")));
+            services.AddDbContext<DeviceUsageDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DeviceUsageDatabase")));
 
-            
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
@@ -76,7 +76,7 @@ namespace SmartEnergy.MicroserviceAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Smart Energy API", Version = "v1" });
-                
+
             });
 
             services.AddCors(options =>
@@ -90,22 +90,8 @@ namespace SmartEnergy.MicroserviceAPI
 
 
             //Add Service implementations
-            services.AddScoped<ISettingsService, SettingsService>();
-            services.AddScoped<IIconService, IconService>();
-            services.AddScoped<ICrewService, CrewService>();
-            services.AddScoped<IUserService, UserService>();          
-            services.AddScoped<IWorkRequestService, WorkRequestService>();
-            services.AddScoped<IIncidentService, IncidentService>();
-            services.AddScoped<IMultimediaService, MultimediaService>();
-            services.AddScoped<ITimeService, TimeService>();
-            services.AddScoped<IStateChangeService, StateChangeService>();
-            services.AddScoped<IResolutionService, ResolutionService>();
-           
-            services.AddScoped<ICallService, CallService>();
-            services.AddScoped<IMailService, MailingService>();
-            services.AddScoped<IAuthHelperService, AuthHelperService>();
-            services.AddScoped<IConsumerService, ConsumerService>();
-            services.AddScoped<ISafetyDocumentService, SafetyDocumentService>();
+            services.AddScoped<IDeviceUsageService, DeviceUsageService>();
+
 
 
         }
@@ -118,7 +104,7 @@ namespace SmartEnergy.MicroserviceAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseCors(_cors);
 
             app.UseRouting();
@@ -140,7 +126,6 @@ namespace SmartEnergy.MicroserviceAPI
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-               
 
                 bool migrated = false;
                 int attempts = 3;
@@ -149,16 +134,18 @@ namespace SmartEnergy.MicroserviceAPI
 
                     try
                     {
-                        var context = serviceScope.ServiceProvider.GetService<MicroserviceDbContext>();
+                        var context = serviceScope.ServiceProvider.GetService<DeviceUsageDbContext>();
                         context.Database.Migrate();
                         migrated = true;
                     }
-                    catch 
+                    catch
                     {
                         Thread.Sleep(50000);
                         attempts--;
                     }
                 }
+
+
             }
         }
     }

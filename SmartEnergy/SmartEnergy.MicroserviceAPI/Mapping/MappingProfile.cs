@@ -73,8 +73,8 @@ namespace SmartEnergy.MicroserviceAPI.Mapping
                 .ForMember(mem => mem.Construction, op => op.MapFrom(o => o.Construction));
 
 
-            CreateMap<DeviceUsage, DeviceUsageDto>();
-            CreateMap<DeviceUsageDto, DeviceUsage>();
+            //CreateMap<DeviceUsage, DeviceUsageDto>();
+            //CreateMap<DeviceUsageDto, DeviceUsage>();
 
 
             CreateMap<Call, CallDto>()

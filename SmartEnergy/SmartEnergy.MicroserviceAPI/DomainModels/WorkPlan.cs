@@ -30,6 +30,6 @@ namespace SmartEnergy.MicroserviceAPI.DomainModels
         public WorkRequest WorkRequest { get; set; }
         public List<Instruction> Instructions { get; set; }
         public List<SafetyDocument> SafetyDocuments { get; set; }
-        public List<DeviceUsage> WorkPlanDevices { get; set; }
+       // public List<DeviceUsage> WorkPlanDevices { get; set; }
     }
 }

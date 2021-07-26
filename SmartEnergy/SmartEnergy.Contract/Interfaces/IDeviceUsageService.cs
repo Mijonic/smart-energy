@@ -2,15 +2,28 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SmartEnergy.Contract.Interfaces
 {
     public interface IDeviceUsageService : IGenericService<DeviceUsageDto>
     {
-        void CopyIncidentDevicesToWorkRequest(int incidentID, int workRequestID);
+        Task<bool> CopyIncidentDevicesToWorkRequest(int incidentID, int workRequestID);
 
-        public void CopyIncidentDevicesToSafetyDocument(int workPlanId, int safetyDocumentId);
+        Task<bool> CopyIncidentDevicesToSafetyDocument(int workPlanId, int safetyDocumentId);
 
-        public void UpdateSafetyDocumentWorkPlan(int workPlanId, int safetyDocumentId);
+        Task<bool> UpdateSafetyDocumentWorkPlan(int workPlanId, int safetyDocumentId);
+
+        Task<bool> DeleteDeviceUsage(int id);
+
+        Task<DeviceUsageDto> GetDeviceUsage(int id);
+
+        Task<List<DeviceUsageDto>> GetAllDeviceUsages();
+
+        Task<DeviceUsageDto> InsertDeviceUsage(DeviceUsageDto entity);
+
+        Task<DeviceUsageDto> UpdateDeviceUsage(DeviceUsageDto entity);
+
+        
     }
 }

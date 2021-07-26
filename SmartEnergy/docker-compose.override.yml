@@ -20,3 +20,10 @@ services:
     ports:
       - "80"
 
+
+  smartenergy.deviceusageapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+

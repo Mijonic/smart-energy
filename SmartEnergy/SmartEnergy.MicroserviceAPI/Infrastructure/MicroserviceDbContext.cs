@@ -23,7 +23,7 @@ namespace SmartEnergy.MicroserviceAPI.Infrastructure
         //public DbSet<Location> Location { get; set; }
         public DbSet<Resolution> Resolutions { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<DeviceUsage> DeviceUsages { get; set; }
+       // public DbSet<DeviceUsage> DeviceUsages { get; set; }
         public DbSet<Instruction> Instructions { get; set; }
         public DbSet<MultimediaAnchor> MultimediaAnchors { get; set; }
         public DbSet<MultimediaAttachment> MultimediaAttachments { get; set; }

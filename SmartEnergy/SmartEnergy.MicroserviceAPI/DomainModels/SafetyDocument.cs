@@ -29,7 +29,7 @@ namespace SmartEnergy.MicroserviceAPI.DomainModels
         public StateChangeAnchor StateChangeAnchor { get; set; }
         public NotificationAnchor NotificationAnchor { get; set; }
         public WorkPlan WorkPlan { get; set; }
-        public List<DeviceUsage> DeviceUsages { get; set; }
+       // public List<DeviceUsage> DeviceUsages { get; set; }
 
 
         public void Update(SafetyDocument newData)

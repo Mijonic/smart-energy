@@ -27,7 +27,7 @@ namespace SmartEnergy.MicroserviceAPI.DomainModels
         public MultimediaAnchor MultimediaAnchor { get; set; }
         public int? NotificationAnchorID { get; set; }
         public NotificationAnchor NotificationAnchor { get; set; }
-        public List<DeviceUsage> IncidentDevices{ get; set; }
+        //public List<DeviceUsage> IncidentDevices{ get; set; }
         public List<Call> Calls { get; set; }
         public WorkRequest WorkRequest { get; set; }
         public WorkType WorkType { get; set; }
