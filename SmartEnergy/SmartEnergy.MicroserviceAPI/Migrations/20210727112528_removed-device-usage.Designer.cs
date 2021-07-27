@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartEnergy.MicroserviceAPI.Infrastructure;
 
 namespace SmartEnergy.MicroserviceAPI.Migrations
 {
     [DbContext(typeof(MicroserviceDbContext))]
-    partial class MicroserviceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210727112528_removed-device-usage")]
+    partial class removeddeviceusage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

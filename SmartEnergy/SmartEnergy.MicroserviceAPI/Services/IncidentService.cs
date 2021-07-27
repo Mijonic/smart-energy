@@ -1268,7 +1268,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             try
             {
-                incidentDeviceUsages = await _daprClient.InvokeMethodAsync<List<DeviceUsageDto>>(HttpMethod.Get, "smartenergydeviceusage", $"/api/device-usage");
+                incidentDeviceUsages = await _daprClient.InvokeMethodAsync<List<DeviceUsageDto>>(HttpMethod.Get, "smartenergydeviceusage", "/api/device-usage");
                 incidentDeviceUsages = incidentDeviceUsages.FindAll(x => x.IncidentID == incident.ID);
             }
             catch (Exception e)

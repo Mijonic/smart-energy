@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Device;
+using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
@@ -78,6 +79,10 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(lnf.Message);
             }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
+            }
 
 
 
@@ -138,11 +143,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult AddSafetyDocument([FromBody] SafetyDocumentDto newSafetyDocument)
+        public async Task<IActionResult> AddSafetyDocument([FromBody] SafetyDocumentDto newSafetyDocument)
         {
             try
             {
-                SafetyDocumentDto sf = _safetyDocumentService.Insert(newSafetyDocument);
+                SafetyDocumentDto sf = await _safetyDocumentService.InsertSafetyDocument(newSafetyDocument);
 
                 return CreatedAtAction(nameof(GetSafetyDocumentById), new { id = sf.ID }, sf);
             }
@@ -158,6 +163,10 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(invalid.Message);
             }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
+            }
 
         }
 
@@ -167,11 +176,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SafetyDocumentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateSafetyDocument(int id, [FromBody] SafetyDocumentDto modifiedSafetyDocument)
+        public async Task<IActionResult> UpdateSafetyDocument(int id, [FromBody] SafetyDocumentDto modifiedSafetyDocument)
         {
             try
             {
-                SafetyDocumentDto sf = _safetyDocumentService.Update(modifiedSafetyDocument);
+                SafetyDocumentDto sf = await _safetyDocumentService.UpdateSafetyDocument(modifiedSafetyDocument);
 
                 return Ok(sf);
             }
@@ -195,7 +204,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return BadRequest(sfinv.Message);
             }
-            
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
+            }
+
 
 
         }

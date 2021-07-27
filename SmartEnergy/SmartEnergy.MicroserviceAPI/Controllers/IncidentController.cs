@@ -262,6 +262,10 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(lnf.Message);
             }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
+            }
         }
 
 
@@ -287,6 +291,10 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             catch (UserNotFoundException usernf)
             {
                 return NotFound(usernf.Message);
+            }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
             }
         }
 
@@ -378,9 +386,13 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(lnf.Message);
             }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
+            }
 
 
-            
+
         }
 
 
@@ -413,9 +425,13 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(lnf.Message);
             }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
+            }
 
 
-
+            
 
         }
 
@@ -439,6 +455,10 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             catch (LocationNotFoundException lnf)
             {
                 return NotFound(lnf.Message);
+            }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
             }
 
         }
@@ -532,6 +552,10 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(lnf.Message);
             }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
+            }
         }
 
 
@@ -557,6 +581,10 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             catch (LocationNotFoundException lnf)
             {
                 return NotFound(lnf.Message);
+            }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
             }
         }
 

@@ -18,7 +18,12 @@ namespace SmartEnergy.Contract.Interfaces
         Task<List<DeviceDto>> GetSafetyDocumentDevices(int safetyDocumentId);
 
         List<SafetyDocumentDto> GetAllMineSafetyDocuments(OwnerFilter owner, ClaimsPrincipal user);
-     
+
+        Task<SafetyDocumentDto> InsertSafetyDocument(SafetyDocumentDto entity);
+
+        Task<SafetyDocumentDto> UpdateSafetyDocument(SafetyDocumentDto entity);
+
+
 
 
 

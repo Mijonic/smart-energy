@@ -19,6 +19,7 @@ using Dapr.Client;
 using System.Net.Http;
 using SmartEnergy.Contract.CustomExceptions.Device;
 using System.Threading.Tasks;
+using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 
 namespace SmartEnergy.MicroserviceAPI.Services
 {
@@ -130,55 +131,76 @@ namespace SmartEnergy.MicroserviceAPI.Services
         }
 
 
-        //SREDITI OVO
+     
         public async Task<List<DeviceDto>> GetSafetyDocumentDevices(int safetyDocumentId)
         {
-            ////SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages)
-            ////                                                 .ThenInclude(x => x.Device)
-            ////                                                 .ThenInclude(x => x.Location)
-            ////                                                 .FirstOrDefault(x => x.ID == safetyDocumentId);
+            //SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages)
+            //                                                 .ThenInclude(x => x.Device)
+            //                                                 .ThenInclude(x => x.Location)
+            //                                                 .FirstOrDefault(x => x.ID == safetyDocumentId);
 
-            //SafetyDocument sf = _dbContext.SafetyDocuments.Include(x => x.DeviceUsages).FirstOrDefault(x => x.ID == safetyDocumentId);
+            SafetyDocument sf = _dbContext.SafetyDocuments.FirstOrDefault(x => x.ID == safetyDocumentId);
 
-            //if (sf == null)
-            //    throw new SafetyDocumentNotFoundException($"Safety document with id {safetyDocumentId} does not exist.");
-
-            //List<DeviceDto> safetyDocumentDevices = new List<DeviceDto>();
-            //DeviceDto deviceDto = new DeviceDto();
+            if (sf == null)
+                throw new SafetyDocumentNotFoundException($"Safety document with id {safetyDocumentId} does not exist.");
 
 
-            //foreach (DeviceUsage deviceUsage in sf.DeviceUsages)
-            //{
-            //    try
-            //    {
-            //        deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
-            //        safetyDocumentDevices.Add(deviceDto);
 
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        throw new DeviceNotFoundException("Device service is unavailable right now.");
-            //    }
+            List<DeviceUsageDto> safetyDocumentDeviceUsages = new List<DeviceUsageDto>();
 
-
-            //}
+            try
+            {
+                safetyDocumentDeviceUsages = await _daprClient.InvokeMethodAsync<List<DeviceUsageDto>>(HttpMethod.Get, "smartenergydeviceusage", $"/api/device-usage");
+                safetyDocumentDeviceUsages = safetyDocumentDeviceUsages.FindAll(x => x.SafetyDocumentID == safetyDocumentId);
+            }
+            catch (Exception e)
+            {
+                throw new DeviceUsageNotFoundException("Device usage service is unavailable right now.");
+            }
 
 
-            ////List<Device> devices = new List<Device>();
-
-            ////foreach (DeviceUsage d in sf.DeviceUsages)
-            ////    devices.Add(d.Device);
-
-            //return safetyDocumentDevices;
 
 
-            return new List<DeviceDto>();
+            List<DeviceDto> safetyDocumentDevices = new List<DeviceDto>();
+            DeviceDto deviceDto = new DeviceDto();
+
+
+            foreach (DeviceUsageDto deviceUsage in safetyDocumentDeviceUsages)
+            {
+                try
+                {
+                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
+                    safetyDocumentDevices.Add(deviceDto);
+
+                }
+                catch (Exception e)
+                {
+                    throw new DeviceNotFoundException("Device service is unavailable right now.");
+                }
+
+
+            }
+
+
+            //List<Device> devices = new List<Device>();
+
+            //foreach (DeviceUsage d in sf.DeviceUsages)
+            //    devices.Add(d.Device);
+
+            return safetyDocumentDevices;
+
+
 
 
 
         }
 
         public SafetyDocumentDto Insert(SafetyDocumentDto entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<SafetyDocumentDto> InsertSafetyDocument(SafetyDocumentDto entity)
         {
 
             ValidateSafetyDocument(entity);
@@ -214,10 +236,28 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             //_deviceUsageService.CopyIncidentDevicesToSafetyDocument(safetyDocument.WorkPlanID, safetyDocument.ID);
 
+            try
+            {
+                 await _daprClient.InvokeMethodAsync(HttpMethod.Put, "smartenergydeviceusage", $"/api/device-usage/copy/work-plan/{safetyDocument.WorkPlanID}/safety-document/{safetyDocument.ID}");
+             
+            }
+            catch (Exception e)
+            {
+                throw new DeviceUsageNotFoundException("Device usage service is unavailable right now.");
+            }
+
+
             return _mapper.Map<SafetyDocumentDto>(safetyDocument);
         }
 
         public SafetyDocumentDto Update(SafetyDocumentDto entity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        //saga
+        public async Task<SafetyDocumentDto> UpdateSafetyDocument(SafetyDocumentDto entity)
         {
             ValidateSafetyDocument(entity);
 
@@ -241,11 +281,24 @@ namespace SmartEnergy.MicroserviceAPI.Services
                 throw new SafetyDocumentInvalidStateException($"Safety document is in {state} state and cannot be edited.");
 
 
-            ////bitnooo treba mi ovo
-            //if(entity.WorkPlanID != existing.WorkPlanID)
-            //{
-            //    _deviceUsageService.UpdateSafetyDocumentWorkPlan(entity.WorkPlanID, entity.ID);
-            //}
+
+            if (entity.WorkPlanID != existing.WorkPlanID)
+            {
+                // _deviceUsageService.UpdateSafetyDocumentWorkPlan(entity.WorkPlanID, entity.ID);
+
+               
+
+                try
+                {
+                    DeviceUsageDto deviceUsage = await _daprClient.InvokeMethodAsync<DeviceUsageDto>(HttpMethod.Put, "smartenergydeviceusage", $"/api/device-usage/work-plan/{entity.WorkPlanID}/safety-document/{entity.ID}");
+                   
+                }
+                catch (Exception e)
+                {
+                    throw new DeviceUsageNotFoundException("Device usage service is unavailable right now.");
+                }
+
+            }
 
             entity.User = null;
 
