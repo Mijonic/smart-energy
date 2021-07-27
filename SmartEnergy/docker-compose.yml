@@ -100,7 +100,7 @@ services:
 
       
 
-
+#device usage
   smartenergy.deviceusageapi:
     image: ${DOCKER_REGISTRY-}smartenergydeviceusageapi
     build:

@@ -15,6 +15,8 @@ using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.DeviceUsageAPI.Infrastructure;
 using SmartEnergy.DeviceUsageAPI.DomainModel;
 using System.Threading.Tasks;
+using Dapr.Client;
+using System.Net.Http;
 
 namespace SmartEnergy.DeviceUsageAPI.Services
 {
@@ -23,11 +25,13 @@ namespace SmartEnergy.DeviceUsageAPI.Services
 
         private readonly DeviceUsageDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly DaprClient _daprClient;
 
-        public DeviceUsageService(DeviceUsageDbContext dbContext, IMapper mapper)
+        public DeviceUsageService(DeviceUsageDbContext dbContext, IMapper mapper, DaprClient daprClient)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _daprClient = daprClient;
         }
 
         //dodati za work plan nof
@@ -35,56 +39,87 @@ namespace SmartEnergy.DeviceUsageAPI.Services
         {
             //SafetyDocument sf = _dbContext.SafetyDocuments.Find(safetyDocumentId);
 
-            //if (sf == null)
-            //    throw new SafetyDocumentNotFoundException($"Safety document with ID {safetyDocumentId} does not exist");
 
-            //List<DeviceUsage> usages = _dbContext.DeviceUsages.Where(x => x.WorkPlanID == workPlanId).ToList();
+            SafetyDocumentDto sf = null;
+
+            try
+            {
+                sf = await _daprClient.InvokeMethodAsync<SafetyDocumentDto>(HttpMethod.Get, "smartenergymicroservice", $"/api/safety-documents/{safetyDocumentId}");
+                
+            }
+            catch (Exception e)
+            {
+                throw new SafetyDocumentNotFoundException("Service for safety document manipulation is unavailable right now.");
+            }
+
+
+            if (sf == null)
+                throw new SafetyDocumentNotFoundException($"Safety document with ID {safetyDocumentId} does not exist");
+
+            List<DeviceUsage> usages = _dbContext.DeviceUsage.Where(x => x.WorkPlanID == workPlanId).ToList();
 
 
 
-            //foreach (DeviceUsage deviceUsage in usages)
-            //{
-            //    deviceUsage.SafetyDocumentID = safetyDocumentId;
-            //}
+            foreach (DeviceUsage deviceUsage in usages)
+            {
+                deviceUsage.SafetyDocumentID = safetyDocumentId;
+            }
 
-            //_dbContext.SaveChanges();
+            _dbContext.SaveChanges();
 
             return true;
         }
 
         public async Task<bool> CopyIncidentDevicesToWorkRequest(int incidentID, int workRequestID)
         {
-            //WorkRequest wr = _dbContext.WorkRequests.Find(workRequestID);
-            //if (wr == null)
-            //    throw new WorkRequestNotFound($"Work request with ID {workRequestID} does not exist");
-            //List<DeviceUsage> usages = _dbContext.DeviceUsages.Where(x => x.IncidentID == incidentID).ToList();
 
-            //foreach(DeviceUsage deviceUsage in usages)
-            //{
-            //    deviceUsage.WorkRequestID = workRequestID;
-            //}
+            WorkRequestDto wr = null;
 
-            //_dbContext.SaveChanges();
+            try
+            {
+                wr = await _daprClient.InvokeMethodAsync<WorkRequestDto>(HttpMethod.Get, "smartenergymicroservice", $"/api/work-requests/{workRequestID}");
+
+            }
+            catch (Exception e)
+            {
+                throw new WorkRequestNotFound("Service for safety document manipulation is unavailable right now.");
+            }
+
+
+            if (wr == null)
+                throw new WorkRequestNotFound($"Work request with ID {workRequestID} does not exist");
+
+            List<DeviceUsage> usages = _dbContext.DeviceUsage.Where(x => x.IncidentID == incidentID).ToList();
+
+            foreach (DeviceUsage deviceUsage in usages)
+            {
+                deviceUsage.WorkRequestID = workRequestID;
+            }
+
+            _dbContext.SaveChanges();
 
             return true;
         }
 
         public async Task<bool> DeleteDeviceUsage(int id)
         {
-            //DeviceUsage deviceUsage = _dbContext.DeviceUsages.FirstOrDefault(x => x.ID.Equals(id));
+            DeviceUsage deviceUsage = _dbContext.DeviceUsage.FirstOrDefault(x => x.ID.Equals(id));
 
-            //if (deviceUsage == null)
-            //    throw new DeviceUsageNotFoundException($"DeviceUsage with Id = {id} does not exists!");
+            if (deviceUsage == null)
+                throw new DeviceUsageNotFoundException($"DeviceUsage with Id = {id} does not exists!");
 
-            //_dbContext.DeviceUsages.Remove(deviceUsage);
-            //_dbContext.SaveChanges();
+            _dbContext.DeviceUsage.Remove(deviceUsage);
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
 
         public async Task<DeviceUsageDto> GetDeviceUsage(int id)
         {
-            return _mapper.Map<DeviceUsageDto>(_dbContext.DeviceUsage.FirstOrDefault(x => x.ID == id));  // nisam vracao objekte incidenta itd
+            DeviceUsage deviceUsage = await _dbContext.DeviceUsage.FirstOrDefaultAsync(x => x.ID == id);
+
+            return  _mapper.Map<DeviceUsageDto>(deviceUsage);  
+        
         }
 
         public async Task<List<DeviceUsageDto>> GetAllDeviceUsages()
@@ -123,93 +158,171 @@ namespace SmartEnergy.DeviceUsageAPI.Services
         public async Task<DeviceUsageDto> UpdateDeviceUsage(DeviceUsageDto entity)
         {
 
-            //ValidateDeviceUsage(entity);
+            ValidateDeviceUsage(entity);
 
-            //DeviceUsage updatedDeviceUsage = _mapper.Map<DeviceUsage>(entity);
-            //DeviceUsage oldDeviceUsage = _dbContext.DeviceUsage.FirstOrDefault(x => x.ID.Equals(updatedDeviceUsage.ID));
-
-
-
-            //if (oldDeviceUsage == null)
-            //    throw new DeviceUsageNotFoundException($"Device usage with Id = {updatedDeviceUsage.ID} does not exists!");
-
-            //if (entity.WorkRequestID != null)
-            //{
-            //    if (_dbContext.WorkRequests.Any(x => x.ID == entity.WorkRequestID) == false)
-            //        throw new WorkRequestNotFound($"Work request with id = {entity.WorkRequestID} does not exists!");
-            //}
-
-
-            //if (entity.WorkPlanID != null)
-            //{
-            //    if (_dbContext.WorkPlans.Any(x => x.ID == entity.WorkPlanID) == false)
-            //        throw new WorkPlanNotFoundException($"Work plan with id = {entity.WorkRequestID} does not exists!");
-            //}
-
-            //if (entity.SafetyDocumentID != null)
-            //{
-            //    if (_dbContext.SafetyDocuments.Any(x => x.ID == entity.SafetyDocumentID) == false)
-            //        throw new SafetyDocumentNotFoundException($"Safety document with id = {entity.SafetyDocumentID} does not exists!");
-            //}
+            DeviceUsage updatedDeviceUsage = _mapper.Map<DeviceUsage>(entity);
+            DeviceUsage oldDeviceUsage = _dbContext.DeviceUsage.FirstOrDefault(x => x.ID.Equals(updatedDeviceUsage.ID));
 
 
 
+            if (oldDeviceUsage == null)
+                throw new DeviceUsageNotFoundException($"Device usage with Id = {updatedDeviceUsage.ID} does not exists!");
 
-            //oldDeviceUsage.UpdateDeviceUsage(updatedDeviceUsage);
-            //_dbContext.SaveChanges();
+            if (entity.WorkRequestID != null)
+            {
 
-            //return _mapper.Map<DeviceUsageDto>(oldDeviceUsage);
+                WorkRequestDto wr = null;
 
-            return new DeviceUsageDto();
+                try
+                {
+                    wr = await _daprClient.InvokeMethodAsync<WorkRequestDto>(HttpMethod.Get, "smartenergymicroservice", $"/api/work-requests/{entity.WorkRequestID}");
+
+                }
+                catch (Exception e)
+                {
+                    throw new SafetyDocumentNotFoundException("Service for safety document manipulation is unavailable right now.");
+                }
+
+
+                if (wr == null)
+                    throw new WorkRequestNotFound($"Work request with id = {entity.WorkRequestID} does not exists!");
+            }
+
+
+          
+            if (entity.WorkPlanID != null)
+            {
+
+                WorkPlanDto wp = null;
+
+                try
+                {
+                    wp = await _daprClient.InvokeMethodAsync<WorkPlanDto>(HttpMethod.Get, "smartenergymicroservice", $"/api/work-plan/{entity.WorkPlanID}");
+
+                }
+                catch (Exception e)
+                {
+                    throw new SafetyDocumentNotFoundException("Service for work plans manipulation is unavailable right now.");
+                }
+
+                if (wp == null)
+                    throw new WorkPlanNotFoundException($"Work plan with id = {entity.WorkPlanID} does not exists!");
+            }
+
+            if (entity.SafetyDocumentID != null)
+            {
+                SafetyDocumentDto sf = null;
+
+                try
+                {
+                    sf = await _daprClient.InvokeMethodAsync<SafetyDocumentDto>(HttpMethod.Get, "smartenergymicroservice", $"/api/safety-documents/{entity.SafetyDocumentID}");
+
+                }
+                catch (Exception e)
+                {
+                    throw new SafetyDocumentNotFoundException("Service for safety document manipulation is unavailable right now.");
+                }
+
+
+                if (sf == null)
+                    throw new SafetyDocumentNotFoundException($"Safety document with ID {entity.SafetyDocumentID} does not exist");
+            }
+
+
+
+
+            oldDeviceUsage.UpdateDeviceUsage(updatedDeviceUsage);
+            _dbContext.SaveChanges();
+
+            return _mapper.Map<DeviceUsageDto>(oldDeviceUsage);
+
+          
         }
 
         public async Task<bool> UpdateSafetyDocumentWorkPlan(int workPlanId, int safetyDocumentId)
         {
 
 
-            //WorkPlan workPlan = _dbContext.WorkPlans.Find(workPlanId);
 
-            //if (workPlan == null)
-            //    throw new WorkPlanNotFoundException($"Work plan with id = {workPlanId} does not exists!");
+            WorkPlanDto wp = null;
+
+            try
+            {
+                wp = await _daprClient.InvokeMethodAsync<WorkPlanDto>(HttpMethod.Get, "smartenergymicroservice", $"/api/work-plan/{workPlanId}");
+
+            }
+            catch (Exception e)
+            {
+                throw new SafetyDocumentNotFoundException("Service for work plans manipulation is unavailable right now.");
+            }
+
+            if (wp == null)
+                throw new WorkPlanNotFoundException($"Work plan with id = {workPlanId} does not exists!");
+
+
+            SafetyDocumentDto sf = null;
+
+            try
+            {
+                sf = await _daprClient.InvokeMethodAsync<SafetyDocumentDto>(HttpMethod.Get, "smartenergymicroservice", $"/api/safety-documents/{safetyDocumentId}");
+
+            }
+            catch (Exception e)
+            {
+                throw new SafetyDocumentNotFoundException("Service for safety document manipulation is unavailable right now.");
+            }
+
+
+            if (sf == null)
+                throw new SafetyDocumentNotFoundException($"Safety document with ID {safetyDocumentId} does not exist");
+
+
+            List<DeviceUsage> usages = _dbContext.DeviceUsage.Where(x => x.SafetyDocumentID == safetyDocumentId).ToList();
 
 
 
-            //SafetyDocument sf = _dbContext.SafetyDocuments.Find(safetyDocumentId);
+            foreach (DeviceUsage deviceUsage in usages)
+            {
+                deviceUsage.WorkPlanID = workPlanId;
+            }
 
-            //if (sf == null)
-            //    throw new SafetyDocumentNotFoundException($"Safety document with ID {safetyDocumentId} does not exist");
-
-
-            //List<DeviceUsage> usages = _dbContext.DeviceUsages.Where(x => x.SafetyDocumentID == safetyDocumentId).ToList();
-
-
-
-            //foreach (DeviceUsage deviceUsage in usages)
-            //{
-            //    deviceUsage.WorkPlanID = workPlanId;
-            //}
-
-            //_dbContext.SaveChanges();
+            _dbContext.SaveChanges();
 
             return true;
         }
 
-        private void ValidateDeviceUsage(DeviceUsageDto entity)
+        private async Task<bool> ValidateDeviceUsage(DeviceUsageDto entity)
         {
 
-            //if (entity.IncidentID == null)
-            //    throw new InvalidDeviceUsageException("Incident id can not be null!");
+            if (entity.IncidentID == null)
+                throw new InvalidDeviceUsageException("Incident id can not be null!");
 
-            //if(entity.IncidentID != null)
-            //{
-            //    if (_dbContext.Incidents.Any(x => x.ID == entity.IncidentID) == false)
-            //        throw new IncidentNotFoundException($"Incident with id = {entity.IncidentID} does not exists!");
-            //}
+            if (entity.IncidentID != null)
+            {
 
-           
+
+                IncidentDto incidendDto = null;
+
+                try
+                {
+                    incidendDto = await _daprClient.InvokeMethodAsync<IncidentDto>(HttpMethod.Get, "smartenergymicroservice", $"/api/incidents/{entity.IncidentID}");
+
+                }
+                catch (Exception e)
+                {
+                    throw new SafetyDocumentNotFoundException("Service for work plans manipulation is unavailable right now.");
+                }
+
+                if (incidendDto == null)
+                    throw new IncidentNotFoundException($"Incident with id = {entity.IncidentID} does not exists!");
+            }
+
+
 
             ////if (_dbContext.Devices.Any(x => x.ID == entity.DeviceID) == false)
             ////    throw new DeviceUsageNotFoundException($"Device with id = {entity.DeviceID} does not exists!");
+
+            return true;
 
 
         }
