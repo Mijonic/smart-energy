@@ -164,7 +164,9 @@ export class ResolutionComponent implements OnInit {
             data => {
             
               this.toastr.success("Resolution created successfully","", {positionClass: 'toast-bottom-left'});
-              this.router.navigate(['incident/resolution', data.id])
+              this.router.navigate(['incident/resolution', this.incidentId])
+              this.isNew = false;
+              this.resolutionId = data.id;
               },
               error=>{
                 this.toastr.error(error.error);

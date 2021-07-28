@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Device;
+using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
@@ -61,7 +62,7 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -115,6 +116,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(dnf.Message);
             }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
+            }
+
         }
 
         [HttpPost]
@@ -123,11 +129,11 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateWorkRequest([FromBody] WorkRequestDto workRequest)
+        public async Task<IActionResult> CreateWorkRequest([FromBody] WorkRequestDto workRequest)
         {
             try
             {
-                WorkRequestDto newWorkRequest = _workRequestService.Insert(workRequest);
+                WorkRequestDto newWorkRequest = await _workRequestService.InsertWorkRequest(workRequest);
                 return CreatedAtAction(nameof(GetById), new { id = newWorkRequest.ID}, newWorkRequest);
             }
             catch (IncidentNotFoundException wnf)
@@ -142,6 +148,12 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return BadRequest(wris.Message);
             }
+            catch (DeviceUsageNotFoundException dunf)
+            {
+                return NotFound(dunf.Message);
+            }
+        
+
         }
 
 
@@ -151,14 +163,14 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkRequestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult EditWorkRequest(int id,[FromBody] WorkRequestDto workRequest)
+        public async Task<IActionResult> EditWorkRequest(int id,[FromBody] WorkRequestDto workRequest)
         {
             try
             {
                 if (User.IsInRole("CREW_MEMBER") &&
                _workRequestService.IsCrewMemberHandlingWorkRequest(_authHelperService.GetUserIDFromPrincipal(User), workRequest.ID))
                     return Unauthorized("Only crew members assigned to work request are allowed to edit it.");
-                WorkRequestDto modified = _workRequestService.Update(workRequest);
+                WorkRequestDto modified = await _workRequestService.UpdateWorkRequest(workRequest);
                 return Ok(modified);
             }
             catch (IncidentNotFoundException wnf)

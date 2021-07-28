@@ -3,6 +3,7 @@ using Dapr.Client;
 using Microsoft.EntityFrameworkCore;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.Device;
+using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.Incident;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
@@ -97,56 +98,68 @@ namespace SmartEnergy.MicroserviceAPI.Services
         //SREDITI OVO
         public async Task<List<DeviceDto>> GetWorkRequestDevices(int workRequestId)
         {
-            ////WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage)
-            ////                                                 .ThenInclude(x => x.Device)
-            ////                                                 .ThenInclude(x => x.Location)
-            ////                                                 .FirstOrDefault(x => x.ID == workRequestId);
+            //WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage)
+            //                                                 .ThenInclude(x => x.Device)
+            //                                                 .ThenInclude(x => x.Location)
+            //                                                 .FirstOrDefault(x => x.ID == workRequestId);
 
-            //WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage).FirstOrDefault(x => x.ID == workRequestId);
+            WorkRequest workRequest = _dbContext.WorkRequests.FirstOrDefault(x => x.ID == workRequestId);
 
-            //if (workRequest == null)
-            //    throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist.");
+            if (workRequest == null)
+                throw new WorkRequestNotFound($"Work request with id {workRequestId} does not exist.");
 
+            List<DeviceUsageDto> workRequestDeviceUsages = new List<DeviceUsageDto>();
 
-            //List<DeviceDto> workRequestDevices = new List<DeviceDto>();
-            //DeviceDto deviceDto = new DeviceDto();
-
-
-            //foreach (DeviceUsage deviceUsage in workRequest.DeviceUsage)
-            //{
-            //    try
-            //    {
-            //        deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
-
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        throw new DeviceNotFoundException("Device service is unavailable right now.");
-            //    }
-
-            //    //try
-            //    //{
-            //    //    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{deviceDto.LocationID}");
-            //    //    deviceDto.Location = location;
-
-            //    //}
-            //    //catch (Exception e)
-            //    //{
-            //    //    throw new LocationNotFoundException("Location service is unavailable right now.");
-            //    //}
-
-            //    workRequestDevices.Add(deviceDto);
+            try
+            {
+                workRequestDeviceUsages = await _daprClient.InvokeMethodAsync<List<DeviceUsageDto>>(HttpMethod.Get, "smartenergydeviceusage", "/api/device-usage");
+                workRequestDeviceUsages = workRequestDeviceUsages.FindAll(x => x.WorkRequestID == workRequestId);
+            }
+            catch (Exception e)
+            {
+                throw new DeviceUsageNotFoundException("Device usage service is unavailable right now.");
+            }
 
 
-
-            //}
-
-
-            //return workRequestDevices;
+            List<DeviceDto> workRequestDevices = new List<DeviceDto>();
+            DeviceDto deviceDto = new DeviceDto();
 
 
+            foreach (DeviceUsageDto deviceUsage in workRequestDeviceUsages)
+            {
+                try
+                {
+                    deviceDto = await _daprClient.InvokeMethodAsync<DeviceDto>(HttpMethod.Get, "smartenergydevice", $"/api/devices/{deviceUsage.DeviceID}");
 
-            return new  List<DeviceDto>();
+                }
+                catch (Exception e)
+                {
+                    throw new DeviceNotFoundException("Device service is unavailable right now.");
+                }
+
+                //try
+                //{
+                //    LocationDto location = await _daprClient.InvokeMethodAsync<LocationDto>(HttpMethod.Get, "smartenergylocation", $"/api/locations/{deviceDto.LocationID}");
+                //    deviceDto.Location = location;
+
+                //}
+                //catch (Exception e)
+                //{
+                //    throw new LocationNotFoundException("Location service is unavailable right now.");
+                //}
+
+                workRequestDevices.Add(deviceDto);
+
+
+
+            }
+
+
+            return workRequestDevices;
+
+
+
+          
 
         }
 
@@ -173,9 +186,9 @@ namespace SmartEnergy.MicroserviceAPI.Services
             return returnValue;
         }
 
-        public WorkRequestDto Insert(WorkRequestDto entity)
+        public async Task<WorkRequestDto> InsertWorkRequest(WorkRequestDto entity)
         {
-            ValidateWorkRequest(entity);
+            await ValidateWorkRequest(entity);
 
             MultimediaAnchor mAnchor = new MultimediaAnchor();
 
@@ -204,12 +217,23 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             //_deviceUsageService.CopyIncidentDevicesToWorkRequest(workRequest.IncidentID, workRequest.ID);
 
+            try
+            {
+                await _daprClient.InvokeMethodAsync(HttpMethod.Put, "smartenergydeviceusage", $"/api/device-usage/copy/incident/{workRequest.IncidentID}/work-request/{workRequest.ID}");
+               
+            }
+            catch (Exception e)
+            {
+                throw new DeviceUsageNotFoundException("Device usage service is unavailable right now.");
+            }
+
+
             return _mapper.Map<WorkRequestDto>(workRequest);
         }
 
-        public WorkRequestDto Update(WorkRequestDto entity)
+        public async Task<WorkRequestDto> UpdateWorkRequest(WorkRequestDto entity)
         {
-            ValidateWorkRequest(entity);
+            await ValidateWorkRequest(entity);
             WorkRequest existing = _dbContext.WorkRequests.Find(entity.ID);
             if (existing == null)
                 throw new WorkRequestNotFound($"Work request with id {entity.ID} does not exist");
@@ -223,7 +247,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
             
         }
 
-        private async void ValidateWorkRequest(WorkRequestDto entity)
+        private async Task<bool> ValidateWorkRequest(WorkRequestDto entity)
         {
             if (_dbContext.Incidents.Find(entity.IncidentID) == null)
             {
@@ -275,6 +299,10 @@ namespace SmartEnergy.MicroserviceAPI.Services
                     throw new LocationNotFoundException("Location service is unavailable right now.");
                 }
             }
+
+
+            return true;
+           
         }
 
 
@@ -419,6 +447,16 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             return true;
 
+        }
+
+        public WorkRequestDto Insert(WorkRequestDto entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public WorkRequestDto Update(WorkRequestDto entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -56,7 +56,7 @@ namespace SmartEnergy.DeviceUsageAPI.Services
             if (sf == null)
                 throw new SafetyDocumentNotFoundException($"Safety document with ID {safetyDocumentId} does not exist");
 
-            List<DeviceUsage> usages = _dbContext.DeviceUsage.Where(x => x.WorkPlanID == workPlanId).ToList();
+            List<DeviceUsage> usages = _dbContext.DeviceUsage.Where(x => x.WorkPlanID == workPlanId && x.SafetyDocumentID == null).ToList();
 
 
 

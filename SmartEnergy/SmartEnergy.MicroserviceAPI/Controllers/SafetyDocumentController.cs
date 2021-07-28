@@ -36,7 +36,7 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         }
 
         [HttpGet("all")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<SafetyDocumentDto>))]
         public IActionResult GetAllSafetyDocuments()
         {
@@ -91,7 +91,7 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SafetyDocumentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetSafetyDocumentById(int id)

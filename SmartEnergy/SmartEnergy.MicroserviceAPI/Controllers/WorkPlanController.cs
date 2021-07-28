@@ -21,8 +21,7 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             _workPlanService = workPlanService;
         }
 
-        [HttpGet("{id}")]
-      
+        [HttpGet("{id}")]   
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkPlanDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

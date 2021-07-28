@@ -17,5 +17,9 @@ namespace SmartEnergy.Contract.Interfaces
 
         public WorkRequestStatisticsDto GetStatisticsForUser(int userId);
         public bool IsCrewMemberHandlingWorkRequest(int crewMemberId, int workRequestId);
+
+        Task<WorkRequestDto> InsertWorkRequest(WorkRequestDto entity);
+
+        Task<WorkRequestDto> UpdateWorkRequest(WorkRequestDto entity);
     }
 }
