@@ -208,6 +208,10 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(dunf.Message);
             }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
 
 

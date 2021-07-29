@@ -20,6 +20,7 @@ using System.Net.Http;
 using SmartEnergy.Contract.CustomExceptions.Device;
 using System.Threading.Tasks;
 using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
+using SmartEnergy.Contract.SagaCompensationInfo;
 
 namespace SmartEnergy.MicroserviceAPI.Services
 {
@@ -33,15 +34,18 @@ namespace SmartEnergy.MicroserviceAPI.Services
         //private readonly IDeviceUsageService _deviceUsageService;
         private readonly IAuthHelperService _authHelperService;
         private readonly DaprClient _daprClient;
+        private readonly ISagaExecutionCoordinatorService _SECService;
 
 
-        public SafetyDocumentService(MicroserviceDbContext dbContext, IMapper mapper, IAuthHelperService authHelperService, DaprClient daprClient)
+        public SafetyDocumentService(MicroserviceDbContext dbContext, IMapper mapper, IAuthHelperService authHelperService, DaprClient daprClient,
+                                     ISagaExecutionCoordinatorService SECService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
            // _deviceUsageService = deviceUsageService;
             _authHelperService = authHelperService;
             _daprClient = daprClient;
+            _SECService = SECService;
         }
 
         public void Delete(int id)
@@ -284,29 +288,113 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             if (entity.WorkPlanID != existing.WorkPlanID)
             {
+                // ovde kod za sagu
                 // _deviceUsageService.UpdateSafetyDocumentWorkPlan(entity.WorkPlanID, entity.ID);
 
-               
+                WorkPlanSafetyDocumentDto wpsfDto = new WorkPlanSafetyDocumentDto() { SafetyDocumentId = existing.ID, WorkPlanId = existing.WorkPlanID };
 
-                try
+                SafetyDocument oldSafetyDocument = new SafetyDocument();
+                oldSafetyDocument.Update(existing);
+                oldSafetyDocument.ID = existing.ID;
+
+                SafetyDocumentDto updatedAfterTransaction = new SafetyDocumentDto();
+
+                CompensationInformation compensationInformation = new CompensationInformation()
                 {
-                    DeviceUsageDto deviceUsage = await _daprClient.InvokeMethodAsync<DeviceUsageDto>(HttpMethod.Put, "smartenergydeviceusage", $"/api/device-usage/work-plan/{entity.WorkPlanID}/safety-document/{entity.ID}");
-                   
-                }
-                catch (Exception e)
+                    CurrentState = SagaState.START_TRANSACTION,
+                    OldSafetyDocument = _mapper.Map<SafetyDocumentDto>(oldSafetyDocument),
+                    OldWorkPanSafetyDocument = wpsfDto
+                };
+
+                compensationInformation.UpdateState(SagaState.UPDATE_SAFETY_DOCUMENT);
+                updatedAfterTransaction = await _SECService.UpdateSafetyDocument(entity, _mapper.Map<SafetyDocumentDto>(existing));
+
+                if(updatedAfterTransaction != null)
                 {
-                    throw new DeviceUsageNotFoundException("Device usage service is unavailable right now.");
+                    compensationInformation.UpdateState(SagaState.SAFETY_DOCUMENT_UPDATED);
+                }else
+                {
+                    compensationInformation.UpdateState(SagaState.COMPENSATE_SF_UPDATE);
+
                 }
 
+
+                bool updatedDeviceUsage = false;
+
+                if (compensationInformation.GetCurrentState() == SagaState.SAFETY_DOCUMENT_UPDATED)
+                {
+                    compensationInformation.UpdateState(SagaState.UPDATE_DEVICE_USAGE);
+                    updatedDeviceUsage = await _SECService.UpdateSafetyDocumentWorkPlan(compensationInformation.OldWorkPanSafetyDocument.WorkPlanId, compensationInformation.OldWorkPanSafetyDocument.SafetyDocumentId);
+
+                    if(updatedDeviceUsage)
+                    {
+                        compensationInformation.UpdateState(SagaState.DEVICE_USAGE_UPDATED);
+                        compensationInformation.UpdateState(SagaState.FINISHED_TRANSACTION);
+
+                    }
+                    else
+                    {
+                        compensationInformation.UpdateState(SagaState.COMPENSATE_DEV_USAGE_UPDATE);
+                        await _SECService.CompensateUpdateSafetyDocumentWorkPlan(compensationInformation.OldWorkPanSafetyDocument.WorkPlanId, compensationInformation.OldWorkPanSafetyDocument.SafetyDocumentId);
+
+                        compensationInformation.UpdateState(SagaState.COMPENSATE_SF_UPDATE);
+                        await _SECService.CompensateUpdateSafetyDocument(entity, compensationInformation.OldSafetyDocument);
+
+                        compensationInformation.UpdateState(SagaState.TRANSACTION_FAILED);
+
+
+                    }
+
+
+                }else
+                {
+                    // ovo mora da se izvrsi, repeat, nije implementirano jos
+                    compensationInformation.UpdateState(SagaState.COMPENSATE_SF_UPDATE);                
+                    SafetyDocumentDto compensatedSafetyDocument = await _SECService.CompensateUpdateSafetyDocument(entity, compensationInformation.OldSafetyDocument);
+
+
+                    if(compensatedSafetyDocument != null)
+                    {
+                        compensationInformation.UpdateState(SagaState.COMPENSATE_SF_UPDATE);
+                        compensationInformation.UpdateState(SagaState.TRANSACTION_FAILED);
+                    }
+
+                }
+
+
+
+
+                if(compensationInformation.GetCurrentState() == SagaState.FINISHED_TRANSACTION)
+                {
+                    return updatedAfterTransaction;
+                }
+                else if( compensationInformation.GetCurrentState() == SagaState.TRANSACTION_FAILED)
+                {
+                    return null;
+
+                }else
+                {
+                    throw new Exception("Unknown state of distributed transaction.");
+                }
+
+
+
+
+             }else
+            {
+                entity.User = null;
+
+                existing.Update(_mapper.Map<SafetyDocument>(entity));
+
+                _dbContext.SaveChanges();
+
+                return _mapper.Map<SafetyDocumentDto>(existing);
             }
 
-            entity.User = null;
 
-            existing.Update(_mapper.Map<SafetyDocument>(entity));
 
-            _dbContext.SaveChanges();
 
-            return _mapper.Map<SafetyDocumentDto>(existing);
+
         }
 
         public ChecklistDto UpdateSafetyDocumentChecklist(ChecklistDto checklistDto)

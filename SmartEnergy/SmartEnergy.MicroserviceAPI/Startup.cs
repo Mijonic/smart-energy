@@ -100,7 +100,7 @@ namespace SmartEnergy.MicroserviceAPI
             services.AddScoped<ITimeService, TimeService>();
             services.AddScoped<IStateChangeService, StateChangeService>();
             services.AddScoped<IResolutionService, ResolutionService>();
-           
+            services.AddScoped<ISagaExecutionCoordinatorService, SagaExecutionCoordinatorService>();
             services.AddScoped<ICallService, CallService>();
             services.AddScoped<IMailService, MailingService>();
             services.AddScoped<IAuthHelperService, AuthHelperService>();
