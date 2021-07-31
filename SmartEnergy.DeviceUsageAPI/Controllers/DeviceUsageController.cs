@@ -213,7 +213,7 @@ namespace SmartEnergy.DeviceUsageAPI.Controllers
 
         [HttpPut("work-plan/{workPlanId}/safety-document/{safetyDocumentId}")]
         //[Authorize(Roles = "ADMIN", Policy = "ApprovedOnly")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DeviceUsageDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateSafetyDocumentWorkPlan(int workPlanId, int safetyDocumentId)
@@ -222,7 +222,9 @@ namespace SmartEnergy.DeviceUsageAPI.Controllers
             {
                 bool condition = await _deviceUsageService.UpdateSafetyDocumentWorkPlan(workPlanId, safetyDocumentId);
 
-                return Ok();
+              
+
+                return Ok(condition);
             }
             catch (WorkPlanNotFoundException wpnf)
             {

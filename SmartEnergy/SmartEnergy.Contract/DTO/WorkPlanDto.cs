@@ -16,8 +16,8 @@ namespace SmartEnergy.Contract.DTO
         public DateTime? CreatedOn { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public WorkType DocumentType { get; set; }
-        public DocumentStatus DocumentStatus { get; set; }
+        public string DocumentType { get; set; }
+        public string DocumentStatus { get; set; }
         public int UserID { get; set; }
         public int? MultimediaAnchorID { get; set; }
         public int? StateChangeAnchorID { get; set; }

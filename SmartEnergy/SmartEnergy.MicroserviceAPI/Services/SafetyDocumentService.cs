@@ -324,7 +324,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
                 if (compensationInformation.GetCurrentState() == SagaState.SAFETY_DOCUMENT_UPDATED)
                 {
                     compensationInformation.UpdateState(SagaState.UPDATE_DEVICE_USAGE);
-                    updatedDeviceUsage = await _SECService.UpdateSafetyDocumentWorkPlan(compensationInformation.OldWorkPanSafetyDocument.WorkPlanId, compensationInformation.OldWorkPanSafetyDocument.SafetyDocumentId);
+                    updatedDeviceUsage = await _SECService.UpdateSafetyDocumentWorkPlan(entity.WorkPlanID, compensationInformation.OldWorkPanSafetyDocument.SafetyDocumentId);
 
                     if(updatedDeviceUsage)
                     {

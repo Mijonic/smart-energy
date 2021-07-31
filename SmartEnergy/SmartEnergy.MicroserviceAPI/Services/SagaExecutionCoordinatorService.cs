@@ -47,22 +47,26 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         public async Task<bool> CompensateUpdateSafetyDocumentWorkPlan(int workPlanId, int safetyDocumentId)
         {
-            DeviceUsageDto deviceUsage = null;
+            bool updated = false;
+
             try
             {
 
-                deviceUsage = await _daprClient.InvokeMethodAsync<DeviceUsageDto>(HttpMethod.Put, "smartenergydeviceusage", $"/api/device-usage/work-plan/{workPlanId}/safety-document/{safetyDocumentId}");
+                updated = await _daprClient.InvokeMethodAsync<bool>(HttpMethod.Put, "smartenergydeviceusage", $"/api/device-usage/work-plan/{workPlanId}/safety-document/{safetyDocumentId}");
 
+            }
+            catch (InvocationException invocationException)
+            {
+                return false;
             }
             catch (Exception e)
             {
                 throw new DeviceUsageNotFoundException("Device usage service is unavailable right now.");
             }
 
-            if (deviceUsage != null)
-                return true;
-            else
-                return false;
+
+
+            return updated;
         }
 
         public async Task<SafetyDocumentDto> UpdateSafetyDocument(SafetyDocumentDto entity, SafetyDocumentDto existing)
@@ -86,22 +90,26 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
         public async Task<bool> UpdateSafetyDocumentWorkPlan(int workPlanId, int safetyDocumentId)
         {
-            DeviceUsageDto deviceUsage = null;
+            bool updated = false;
+         
             try
             {
 
-                deviceUsage = await _daprClient.InvokeMethodAsync<DeviceUsageDto>(HttpMethod.Put, "smartenergydeviceusage", $"/api/device-usage/work-plan/{workPlanId}/safety-document/{safetyDocumentId}");
+                updated = await _daprClient.InvokeMethodAsync<bool>(HttpMethod.Put, "smartenergydeviceusage", $"/api/device-usage/work-plan/{workPlanId}/safety-document/{safetyDocumentId}");
 
+            }
+            catch (InvocationException invocationException)
+            {
+                return false;
             }
             catch (Exception e)
             {
                 throw new DeviceUsageNotFoundException("Device usage service is unavailable right now.");
             }
 
-            if (deviceUsage != null)
-                return true;
-            else
-                return false;
+
+
+            return updated;
         }
 
    

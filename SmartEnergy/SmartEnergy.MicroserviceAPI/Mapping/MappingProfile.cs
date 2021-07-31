@@ -90,6 +90,15 @@ namespace SmartEnergy.MicroserviceAPI.Mapping
             CreateMap<ConsumerDto, Consumer>()
                  .ForMember(mem => mem.AccountType, op => op.MapFrom(o => o.AccountType));
 
+            CreateMap<WorkPlan, WorkPlanDto>()
+             .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
+             .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
+             
+
+            CreateMap<WorkPlanDto, WorkPlan>()
+              .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
+              .ForMember(mem => mem.DocumentType, op => op.MapFrom(o => o.DocumentType));
+
 
             CreateMap<SafetyDocument, SafetyDocumentDto>()
               .ForMember(mem => mem.DocumentStatus, op => op.MapFrom(o => o.DocumentStatus))
