@@ -24,7 +24,7 @@ namespace SmartEnergy.Contract.DTO
         public int? NotificationAnchorID { get; set; }
         public int WorkPlanID { get; set; }
         public UserDto User { get; set; }
-
+        public int SagaIndicator { get; set; }
         public string CrewName { get; set; }
         //public MultimediaAnchor MultimediaAnchor { get; set; }
         //public StateChangeAnchor StateChangeAnchor { get; set; }

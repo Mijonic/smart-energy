@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Dapr.Client;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using SmartEnergy.Contract.CustomExceptions;
 using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
+using SmartEnergy.Contract.CustomExceptions.Saga;
 using SmartEnergy.Contract.CustomExceptions.WorkPlan;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
@@ -13,6 +16,7 @@ using SmartEnergy.MicroserviceAPI.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -31,18 +35,56 @@ namespace SmartEnergy.MicroserviceAPI.Services
             _daprClient = daprClient;
         }
 
-        public async Task<SafetyDocumentDto> CompensateUpdateSafetyDocument(SafetyDocumentDto entity, SafetyDocumentDto oldValue)
+        public async Task<SafetyDocumentDto> CompensateUpdateSafetyDocument(SafetyDocumentDto oldSafetyDocument)
         {
-            SafetyDocument toUpdate = _mapper.Map<SafetyDocument>(oldValue);
+            SafetyDocument existing = await _dbContext.SafetyDocuments.FindAsync(oldSafetyDocument.ID);
 
-            entity.User = null;
+            if (existing == null)
+                throw new SafetyDocumentNotFoundException($"Safety document with id {oldSafetyDocument.ID} does not exist");
 
+            oldSafetyDocument.User = null;
 
-            toUpdate.Update(_mapper.Map<SafetyDocument>(entity));
+            var updated = -1;
+            int currentRetry = 0;
+            int maxRetry = 5;
+            int delay = 5;
 
-            await _dbContext.SaveChangesAsync();
+            do
+            {
 
-            return _mapper.Map<SafetyDocumentDto>(toUpdate);
+                try
+                {
+                    existing.Update(_mapper.Map<SafetyDocument>(oldSafetyDocument));
+                    updated = await _dbContext.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {                  
+
+                    currentRetry++;
+
+             
+                    if (currentRetry > maxRetry || !IsTransient(ex))
+                    {
+                        throw new SagaException("Distributed transaction failed, server is under maintenance!");
+                    }
+                }
+
+               
+               if( updated <= 0)
+               {
+                    await Task.Delay(TimeSpan.FromSeconds(delay));
+                    delay += 5;
+               }
+            
+
+            
+
+            } while (updated <= 0);
+
+            SafetyDocumentDto toReturn = _mapper.Map<SafetyDocumentDto>(existing);
+            toReturn.SagaIndicator = 0;
+
+            return toReturn;
         }
 
         public async Task<bool> CompensateUpdateSafetyDocumentWorkPlan(int workPlanId, int safetyDocumentId)
@@ -69,21 +111,26 @@ namespace SmartEnergy.MicroserviceAPI.Services
             return updated;
         }
 
-        public async Task<SafetyDocumentDto> UpdateSafetyDocument(SafetyDocumentDto entity, SafetyDocumentDto existing)
+        public async Task<SafetyDocumentDto> UpdateSafetyDocument(SafetyDocumentDto entity)
         {
-           
-            SafetyDocument toUpdate = _mapper.Map<SafetyDocument>(existing);
+
+            SafetyDocument existing = await _dbContext.SafetyDocuments.FindAsync(entity.ID);
+
+            if (existing == null)
+                throw new SafetyDocumentNotFoundException($"Safety document with id {entity.ID} does not exist");
 
             entity.User = null;
 
-
-            toUpdate.Update(_mapper.Map<SafetyDocument>(entity));
+            existing.Update(_mapper.Map<SafetyDocument>(entity));
 
             await _dbContext.SaveChangesAsync();
 
-            return _mapper.Map<SafetyDocumentDto>(toUpdate);
+            SafetyDocumentDto updated = _mapper.Map<SafetyDocumentDto>(existing);
+            updated.SagaIndicator = 1;
 
-          
+            return updated;
+
+
         }
 
             
@@ -98,13 +145,10 @@ namespace SmartEnergy.MicroserviceAPI.Services
                 updated = await _daprClient.InvokeMethodAsync<bool>(HttpMethod.Put, "smartenergydeviceusage", $"/api/device-usage/work-plan/{workPlanId}/safety-document/{safetyDocumentId}");
 
             }
-            catch (InvocationException invocationException)
-            {
-                return false;
-            }
+         
             catch (Exception e)
             {
-                throw new DeviceUsageNotFoundException("Device usage service is unavailable right now.");
+                return false;
             }
 
 
@@ -112,9 +156,39 @@ namespace SmartEnergy.MicroserviceAPI.Services
             return updated;
         }
 
-   
 
 
-     
+        private bool IsTransient(Exception ex)
+        {
+           
+            if (ex is SqlException)
+                return true;
+
+            if (ex is DbUpdateException)
+                return true;
+
+            if (ex is InvalidOperationException)
+                return true;
+
+            if (ex is ObjectDisposedException)
+                return true;
+
+            var webException = ex as WebException;
+            if (webException != null)
+            {
+                
+                return new[] {WebExceptionStatus.ConnectionClosed,
+                  WebExceptionStatus.Timeout,
+                  WebExceptionStatus.RequestCanceled }.
+                        Contains(webException.Status);
+            }
+
+
+
+           
+            return false;
+        }
+
+
     }
 }

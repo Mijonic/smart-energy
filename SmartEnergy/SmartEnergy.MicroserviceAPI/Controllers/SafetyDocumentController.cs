@@ -11,6 +11,7 @@ using SmartEnergy.Contract.CustomExceptions.DeviceUsage;
 using SmartEnergy.Contract.CustomExceptions.Location;
 using SmartEnergy.Contract.CustomExceptions.Multimedia;
 using SmartEnergy.Contract.CustomExceptions.SafetyDocument;
+using SmartEnergy.Contract.CustomExceptions.Saga;
 using SmartEnergy.Contract.CustomExceptions.WorkPlan;
 using SmartEnergy.Contract.CustomExceptions.WorkRequest;
 using SmartEnergy.Contract.DTO;
@@ -208,10 +209,15 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
             {
                 return NotFound(dunf.Message);
             }
+            catch (SagaException sagaException)
+            {
+                return BadRequest(sagaException.Message);
+            }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
+         
 
 
 

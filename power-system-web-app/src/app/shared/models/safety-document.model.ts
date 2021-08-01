@@ -18,6 +18,7 @@ export class SafetyDocument {
     userID:number = 0;
     user: User
     workPlanID:number = 0;
+    sagaIndicator:number = 0;
 
     crewName: string;
 

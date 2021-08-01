@@ -307,7 +307,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
                 };
 
                 compensationInformation.UpdateState(SagaState.UPDATE_SAFETY_DOCUMENT);
-                updatedAfterTransaction = await _SECService.UpdateSafetyDocument(entity, _mapper.Map<SafetyDocumentDto>(existing));
+                updatedAfterTransaction = await _SECService.UpdateSafetyDocument(entity);
 
                 if(updatedAfterTransaction != null)
                 {
@@ -334,11 +334,11 @@ namespace SmartEnergy.MicroserviceAPI.Services
                     }
                     else
                     {
-                        compensationInformation.UpdateState(SagaState.COMPENSATE_DEV_USAGE_UPDATE);
-                        await _SECService.CompensateUpdateSafetyDocumentWorkPlan(compensationInformation.OldWorkPanSafetyDocument.WorkPlanId, compensationInformation.OldWorkPanSafetyDocument.SafetyDocumentId);
+                        //compensationInformation.UpdateState(SagaState.COMPENSATE_DEV_USAGE_UPDATE);
+                        //await _SECService.CompensateUpdateSafetyDocumentWorkPlan(compensationInformation.OldWorkPanSafetyDocument.WorkPlanId, compensationInformation.OldWorkPanSafetyDocument.SafetyDocumentId);
 
                         compensationInformation.UpdateState(SagaState.COMPENSATE_SF_UPDATE);
-                        await _SECService.CompensateUpdateSafetyDocument(entity, compensationInformation.OldSafetyDocument);
+                        await _SECService.CompensateUpdateSafetyDocument(compensationInformation.OldSafetyDocument);
 
                         compensationInformation.UpdateState(SagaState.TRANSACTION_FAILED);
 
@@ -350,7 +350,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
                 {
                     // ovo mora da se izvrsi, repeat, nije implementirano jos
                     compensationInformation.UpdateState(SagaState.COMPENSATE_SF_UPDATE);                
-                    SafetyDocumentDto compensatedSafetyDocument = await _SECService.CompensateUpdateSafetyDocument(entity, compensationInformation.OldSafetyDocument);
+                    SafetyDocumentDto compensatedSafetyDocument = await _SECService.CompensateUpdateSafetyDocument(compensationInformation.OldSafetyDocument);
 
 
                     if(compensatedSafetyDocument != null)
@@ -370,7 +370,8 @@ namespace SmartEnergy.MicroserviceAPI.Services
                 }
                 else if( compensationInformation.GetCurrentState() == SagaState.TRANSACTION_FAILED)
                 {
-                    return null;
+                    compensationInformation.OldSafetyDocument.SagaIndicator = 0;
+                    return compensationInformation.OldSafetyDocument;
 
                 }else
                 {
@@ -388,7 +389,9 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
                 _dbContext.SaveChanges();
 
-                return _mapper.Map<SafetyDocumentDto>(existing);
+                SafetyDocumentDto toReturn = _mapper.Map<SafetyDocumentDto>(existing);
+                toReturn.SagaIndicator = 1;
+                return toReturn;
             }
 
 

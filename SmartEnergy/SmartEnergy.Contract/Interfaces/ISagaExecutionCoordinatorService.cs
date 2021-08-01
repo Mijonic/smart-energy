@@ -10,8 +10,8 @@ namespace SmartEnergy.Contract.Interfaces
     public interface ISagaExecutionCoordinatorService
     {
 
-        Task<SafetyDocumentDto> UpdateSafetyDocument(SafetyDocumentDto entity, SafetyDocumentDto existing);
-        Task<SafetyDocumentDto> CompensateUpdateSafetyDocument(SafetyDocumentDto entity, SafetyDocumentDto oldValue);
+        Task<SafetyDocumentDto> UpdateSafetyDocument(SafetyDocumentDto entity);
+        Task<SafetyDocumentDto> CompensateUpdateSafetyDocument(SafetyDocumentDto oldSafetyDocument);
         Task<bool> UpdateSafetyDocumentWorkPlan(int workPlanId, int safetyDocumentId);
         Task<bool> CompensateUpdateSafetyDocumentWorkPlan(int workPlanId, int safetyDocumentId);
 

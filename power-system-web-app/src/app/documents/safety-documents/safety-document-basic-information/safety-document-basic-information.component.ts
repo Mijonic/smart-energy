@@ -1,3 +1,4 @@
+import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -49,6 +50,9 @@ export class SafetyDocumentBasicInformationComponent implements OnInit {
   isNew = true;
   isLoading:boolean = false;
   safetyDocumentId:number;
+
+  oldWorkPlan: number;
+  
 
 
   constructor(public dialog:MatDialog, private safetyDocumentsService: SafetyDocumentService, private validation:ValidationService, private route:ActivatedRoute, private userService:UserService,
@@ -199,10 +203,36 @@ export class SafetyDocumentBasicInformationComponent implements OnInit {
           )
         }else
         {
+
+          this.oldWorkPlan = this.safetyDocument.workPlanID;
+
           this.safetyDocumentsService.updateSafetyDocument(this.safetyDocument).subscribe(
             data =>{
-              this.toastr.success("Safety document updated successfully","", {positionClass: 'toast-bottom-left'});
-              this.safetyDocument = data;
+            
+               
+                this.safetyDocument = data;
+
+            
+                this.safetyDocumentForm.controls['workPlanID'].setValue(this.safetyDocument.workPlanID);              
+                this.safetyDocumentForm.controls['documentType'].setValue(this.safetyDocument.documentType);
+                this.safetyDocumentForm.controls['details'].setValue(this.safetyDocument.details);
+                this.safetyDocumentForm.controls['phone'].setValue(this.safetyDocument.phone);
+                this.safetyDocumentForm.controls['notes'].setValue(this.safetyDocument.notes);
+
+              
+                if(data.sagaIndicator == 0)
+                {
+                  this.toastr.error("Failed to update safety document","", {positionClass: 'toast-bottom-left'});
+
+                }else if(data.sagaIndicator == 1)
+                {
+                  this.toastr.success("Safety document updated successfully","", {positionClass: 'toast-bottom-left'});
+                }
+                
+                
+               
+               
+             
               this.isLoading = false;
             },
             error =>{
@@ -212,7 +242,7 @@ export class SafetyDocumentBasicInformationComponent implements OnInit {
                   this.toastr.error("Server is unreachable","", {positionClass: 'toast-bottom-left'});
                 }else
                 {
-                  this.toastr.error(error.error);
+                  this.toastr.error(error.error,"", {positionClass: 'toast-bottom-left'});
                 }
               
             }
