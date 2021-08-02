@@ -40,5 +40,24 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         }
 
 
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WorkPlanDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                List<WorkPlanDto> workPlans =  _workPlanService.GetAllWorkPlans();
+
+                return Ok(workPlans);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+
     }
 }

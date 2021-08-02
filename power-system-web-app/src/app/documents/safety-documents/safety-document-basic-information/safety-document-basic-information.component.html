@@ -43,7 +43,7 @@
         </div>
 
         
-        <div class="row" >
+        <!-- <div class="row" >
           <div class="col-md-6">
             <div class="p-3 d-flex flex-row">
               <mat-form-field class="w-100">
@@ -58,7 +58,26 @@
                 <mat-icon >more_horiz</mat-icon>
               </a>
             </div>
-          </div>
+          </div> -->
+
+             
+          <div class="row"  >
+            <div class="col-md-6">
+              <div class="p-3 d-flex flex-row">
+                    <mat-form-field class="w-100"  appearance="legacy">
+                        <mat-label>Work Plan</mat-label>
+                        <mat-select required formControlName="workPlanID">
+                            <mat-option *ngFor="let workPlan of allWorkPlnas" value="{{workPlan.id}}">{{workPlan.id}}</mat-option>
+                        </mat-select>
+                  
+                    <mat-error  *ngIf="submitted && safetyDocumentForm.controls.workPlanID.invalid">
+                      
+                      Please select work plan.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+            </div>
+         
   
           <div class="col-md-6">
             <div class="p-3">

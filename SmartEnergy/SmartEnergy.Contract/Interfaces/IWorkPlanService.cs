@@ -9,5 +9,7 @@ namespace SmartEnergy.Contract.Interfaces
     public interface IWorkPlanService
     {
         Task<WorkPlanDto> GetWorkPlanById(int workPlanId);
+
+        List<WorkPlanDto> GetAllWorkPlans();
     }
 }

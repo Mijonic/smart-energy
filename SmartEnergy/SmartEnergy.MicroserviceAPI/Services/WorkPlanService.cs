@@ -22,6 +22,11 @@ namespace SmartEnergy.MicroserviceAPI.Services
             _mapper = mapper;
         }
 
+        public List<WorkPlanDto> GetAllWorkPlans()
+        {
+            return _mapper.Map<List<WorkPlanDto>>( _dbContext.WorkPlans.ToList());
+        }
+
         public async Task<WorkPlanDto> GetWorkPlanById(int id)
         {
             WorkPlan workPlan =  await _dbContext.WorkPlans.FindAsync(id);

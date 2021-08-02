@@ -8,8 +8,10 @@ import { SafetyDocumentService } from 'app/services/safety-document.service';
 import { TabMessagingService } from 'app/services/tab-messaging.service';
 import { UserService } from 'app/services/user.service';
 import { ValidationService } from 'app/services/validation.service';
+import { WorkPlanService } from 'app/services/work-plan.service';
 import { SafetyDocument } from 'app/shared/models/safety-document.model';
 import { User } from 'app/shared/models/user.model';
+import { WorkPlan } from 'app/shared/models/work-plan.model';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -46,6 +48,8 @@ export class SafetyDocumentBasicInformationComponent implements OnInit {
 
   });
 
+  submitted = false;
+  allWorkPlnas: WorkPlan[] = [];
 
   isNew = true;
   isLoading:boolean = false;
@@ -57,13 +61,17 @@ export class SafetyDocumentBasicInformationComponent implements OnInit {
 
   constructor(public dialog:MatDialog, private safetyDocumentsService: SafetyDocumentService, private validation:ValidationService, private route:ActivatedRoute, private userService:UserService,
      private toastr:ToastrService, private router:Router, private incidentService:IncidentService,
-    private tabMessaging:TabMessagingService)
+    private tabMessaging:TabMessagingService, private workPlanService:WorkPlanService)
 
     {
 
     }
 
   ngOnInit(): void {
+
+    this.loadWorkPlans();
+    console.log(this.allWorkPlnas);
+
     const safetyDocumentId = this.route.snapshot.paramMap.get('id');
       if(safetyDocumentId && safetyDocumentId != "")
       {
@@ -99,13 +107,37 @@ export class SafetyDocumentBasicInformationComponent implements OnInit {
       );
   }
 
+
+  loadWorkPlans()
+  {
+   
+      this.workPlanService.getAllWorkPlans().subscribe(
+        data =>{
+         
+          this.allWorkPlnas = data;
+          // console.log(data)
+          // console.log(this.allWorkPlnas)
+         
+        } ,
+        error =>{
+          if(error.error instanceof ProgressEvent)
+          {
+            this.workPlanService.getAllWorkPlans();
+          }else
+          {
+            this.toastr.error(error.error);
+          }
+        }
+      );
+  }
+
   populateControls(safetyDocument: SafetyDocument)
   {
     
    
 
       this.safetyDocumentForm.controls['documentType'].setValue(safetyDocument.documentType);
-      this.safetyDocumentForm.controls['workPlanID'].setValue(safetyDocument.workPlanID);
+      this.safetyDocumentForm.controls['workPlanID'].setValue(safetyDocument.workPlanID.toString());
       this.safetyDocumentForm.controls['createdOn'].setValue(safetyDocument.createdOn);
 
       if(safetyDocument.documentStatus == "APPROVED")
@@ -171,7 +203,8 @@ export class SafetyDocumentBasicInformationComponent implements OnInit {
 
   onSave()
   {
-    console.log("pokusaj cuvanja");
+    this.submitted = true;
+
     if(this.safetyDocumentForm.valid)
     {
 
@@ -213,7 +246,7 @@ export class SafetyDocumentBasicInformationComponent implements OnInit {
                 this.safetyDocument = data;
 
             
-                this.safetyDocumentForm.controls['workPlanID'].setValue(this.safetyDocument.workPlanID);              
+                this.safetyDocumentForm.controls['workPlanID'].setValue(this.safetyDocument.workPlanID.toString());              
                 this.safetyDocumentForm.controls['documentType'].setValue(this.safetyDocument.documentType);
                 this.safetyDocumentForm.controls['details'].setValue(this.safetyDocument.details);
                 this.safetyDocumentForm.controls['phone'].setValue(this.safetyDocument.phone);
