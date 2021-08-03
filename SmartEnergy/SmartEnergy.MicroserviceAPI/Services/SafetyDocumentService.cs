@@ -288,7 +288,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
             if (entity.WorkPlanID != existing.WorkPlanID)
             {
-                // ovde kod za sagu
+              
                 // _deviceUsageService.UpdateSafetyDocumentWorkPlan(entity.WorkPlanID, entity.ID);
 
                 WorkPlanSafetyDocumentDto wpsfDto = new WorkPlanSafetyDocumentDto() { SafetyDocumentId = existing.ID, WorkPlanId = existing.WorkPlanID };
@@ -348,7 +348,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
 
                 }else
                 {
-                    // ovo mora da se izvrsi, repeat, nije implementirano jos
+          
                     compensationInformation.UpdateState(SagaState.COMPENSATE_SF_UPDATE);                
                     SafetyDocumentDto compensatedSafetyDocument = await _SECService.CompensateUpdateSafetyDocument(compensationInformation.OldSafetyDocument);
 

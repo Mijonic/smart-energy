@@ -95,7 +95,7 @@ namespace SmartEnergy.MicroserviceAPI.Services
         }
 
 
-        //SREDITI OVO
+       
         public async Task<List<DeviceDto>> GetWorkRequestDevices(int workRequestId)
         {
             //WorkRequest workRequest = _dbContext.WorkRequests.Include(x => x.DeviceUsage)

@@ -135,7 +135,7 @@ namespace SmartEnergy.DeviceUsageAPI.Services
         public async Task<DeviceUsageDto> InsertDeviceUsage(DeviceUsageDto entity)
         {
 
-            ValidateDeviceUsage(entity);
+            await ValidateDeviceUsage(entity);
 
             DeviceUsage newDeviceUsage = _mapper.Map<DeviceUsage>(entity);
 
@@ -158,7 +158,7 @@ namespace SmartEnergy.DeviceUsageAPI.Services
         public async Task<DeviceUsageDto> UpdateDeviceUsage(DeviceUsageDto entity)
         {
 
-            ValidateDeviceUsage(entity);
+            await ValidateDeviceUsage(entity);
 
             DeviceUsage updatedDeviceUsage = _mapper.Map<DeviceUsage>(entity);
             DeviceUsage oldDeviceUsage = _dbContext.DeviceUsage.FirstOrDefault(x => x.ID.Equals(updatedDeviceUsage.ID));
