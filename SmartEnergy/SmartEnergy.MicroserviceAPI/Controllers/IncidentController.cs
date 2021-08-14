@@ -128,7 +128,7 @@ namespace SmartEnergy.MicroserviceAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
+        //[Authorize(Roles = "CREW_MEMBER, DISPATCHER, WORKER ", Policy = "ApprovedOnly")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IncidentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
