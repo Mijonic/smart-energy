@@ -1,5 +1,9 @@
 # smart-energy
 
+## Description
+
+Monolithic implementation of distribution network monitoring web application proved to be an insufficient quality solution in terms of aspects such as scalability, sustainability and performance. Migration from monolithic to microservice architecture was applied in order to solve the previously mentioned problems. Successful application of the microservice architecture required proper handling of distributed transactions.
+
 ## Required software
 
 - Visual Studio Code
